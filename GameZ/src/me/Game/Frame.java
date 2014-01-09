@@ -80,6 +80,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener{
 	@Override
 	public void keyTyped(KeyEvent keyState) {
 	  System.out.println("Char: " + keyState.getKeyChar() + " Code: " +keyState.getKeyCode());
+	  ClientTest test = new ClientTest();
 	}
 
 	@Override
