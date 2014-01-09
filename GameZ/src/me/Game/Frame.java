@@ -20,6 +20,8 @@ public class Frame extends JFrame implements KeyListener, MouseListener{
 	private BufferStrategy strat;
 	private int JHeight, JWidth;
 	private Random rand = new Random();
+	int mouseX = 0;
+	int mouseY = 0;
 	
 	public Frame()
 	{
@@ -56,25 +58,23 @@ public class Frame extends JFrame implements KeyListener, MouseListener{
 	
 	public void Update()
 	{
-	
 	}
 	
 	public void Draw(Graphics g)
 	{
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, JWidth, JHeight);
+		
+		g.setColor(Color.GREEN);
+		g.fillRect(100, 100, 400, 100);
 	}
 
 	@Override
 	public void keyPressed(KeyEvent keyState) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void keyReleased(KeyEvent keyState) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -87,33 +87,24 @@ public class Frame extends JFrame implements KeyListener, MouseListener{
 		PointerInfo a = MouseInfo.getPointerInfo();
 		Point point = new Point(a.getLocation());
 		SwingUtilities.convertPointFromScreen(point, e.getComponent());
-		int mouseX=(int) point.getX();
-		int mouseY=(int) point.getY();	
+		mouseX = (int) point.getX();
+		mouseY = (int) point.getY();	
+		System.out.println("Mouse clicked! X: " + point.getX() + " Y: " + point.getY());
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
+	}	
 }
