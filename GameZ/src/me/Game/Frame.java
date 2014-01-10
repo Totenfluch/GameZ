@@ -22,49 +22,51 @@ public class Frame extends JFrame implements KeyListener, MouseListener{
 	private Random rand = new Random();
 	int mouseX = 0;
 	int mouseY = 0;
-	
+
 	public Frame()
 	{
-	  super("Game");
+		super("Game");
+		setResizable(false);
+		setLocationRelativeTo(null);
 	}
-	
+
 	public void initialize()
 	{
-       makestrat();
-       
-       JWidth = getSize().width;
-       JHeight = getSize().height;
-       
-       addKeyListener(this);
-       requestFocus();
-       addMouseListener(this);
-       
+		makestrat();
+
+		JWidth = getSize().width;
+		JHeight = getSize().height;
+
+		addKeyListener(this);
+		requestFocus();
+		addMouseListener(this);
+
 	}
-	
+
 	public void makestrat()
 	{
 		createBufferStrategy(2);
 		strat = getBufferStrategy();
 	}
-	
+
 	public void Repaint()
 	{
 		Graphics g = strat.getDrawGraphics();
 		Draw(g);
 		g.dispose();
-		
+
 		strat.show();		
 	}
-	
+
 	public void Update()
 	{
 	}
-	
+
 	public void Draw(Graphics g)
 	{
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, JWidth, JHeight);
-		
+
 		g.setColor(Color.GREEN);
 		g.fillRect(100, 100, 400, 100);
 	}
@@ -79,8 +81,8 @@ public class Frame extends JFrame implements KeyListener, MouseListener{
 
 	@Override
 	public void keyTyped(KeyEvent keyState) {
-	  System.out.println("Char: " + keyState.getKeyChar() + " Code: " +keyState.getKeyCode());
-	  ClientTest test = new ClientTest();
+		System.out.println("Char: " + keyState.getKeyChar() + " Code: " +keyState.getKeyCode());
+		ClientTest test = new ClientTest();
 	}
 
 	@Override
@@ -91,6 +93,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener{
 		mouseX = (int) point.getX();
 		mouseY = (int) point.getY();	
 		System.out.println("Mouse clicked! X: " + point.getX() + " Y: " + point.getY());
+
 	}
 
 	@Override
