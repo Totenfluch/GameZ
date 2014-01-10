@@ -29,7 +29,7 @@ public class LoginWindow extends JFrame{
 		setResizable(false);
 		
 		setLayout(new BorderLayout());
-		JLabel background=new JLabel(ResourceLoader.Iconload("/LoginBackgroundTest.jpg"));
+		JLabel background=new JLabel(ResourceLoader.Iconload("/LoginBackground.jpg"));
 		background.setSize(800, 600);
 		add(background);
 		
