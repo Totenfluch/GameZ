@@ -25,6 +25,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
@@ -41,6 +42,7 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 	private int mouseX, mouseY;
 	private boolean login_button_pressed=false, register_button_pressed=false;
 	private JLabel version;
+	public static JTextArea MOTD;
 
 	public LoginWindow(){
 		setSize(806, 629);
@@ -58,6 +60,11 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 		version.setForeground(Color.WHITE);
 		version.setBounds(12, 606, 100, 20);
 		background.add(version);
+		
+		MOTD = new JTextArea("Welcome to the Epic Login!\n");
+		MOTD.setBounds(128, 172, 541, 206);
+		MOTD.setEditable(false);
+		background.add(MOTD);
 		
 		Username = new JTextField("", 20);
 		Username.setForeground(Color.WHITE);
