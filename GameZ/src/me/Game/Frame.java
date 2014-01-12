@@ -54,6 +54,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener{
 		Graphics g = strat.getDrawGraphics();
 		Draw(g);
 		g.dispose();
+		
 
 		strat.show();		
 	}
