@@ -35,17 +35,8 @@ import me.Other.*;
 public class LoginWindow extends JFrame implements MouseListener, KeyListener, MouseMotionListener{
 	private JComponent Username;
 	private JComponent Password;
-	private JButton loginbutton;
-	private JButton overridelogin;
-	private JButton createAccount;
 	private JLabel or;
 	private BufferStrategy strat;
-	private JLabel LoginButton_01;
-	private JLabel LoginButton_02;
-	private JLabel LoginButton_03;
-	private JLabel RegisterButton_01;
-	private JLabel RegisterButton_02;
-	private JLabel RegisterButton_03;
 	private JLabel background;
 	private int mouseX, mouseY;
 	private boolean login_button_pressed=false, register_button_pressed=false;
@@ -83,23 +74,6 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 		Password.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Color.BLACK));
 		Password.setFont(new Font("Serif", Font.BOLD, 25));
 		background.add(Password);
-		
-		/*LoginButton_01=new JLabel(ResourceLoader.Iconload("/login_01.jpg"));
-		LoginButton_02=new JLabel(ResourceLoader.Iconload("/login_02.jpg"));
-		LoginButton_03=new JLabel(ResourceLoader.Iconload("/login_03.jpg"));
-		RegisterButton_01=new JLabel(ResourceLoader.Iconload("/register_01.jpg"));
-		RegisterButton_02=new JLabel(ResourceLoader.Iconload("/register_02.jpg"));
-		RegisterButton_03=new JLabel(ResourceLoader.Iconload("/register_03.jpg"));
-		
-		LoginButton_01.setBounds(499, 433, 170, 97);
-		LoginButton_02.setBounds(560, 410, 170, 97);
-		LoginButton_03.setBounds(499, 433, 170, 97);
-		background.add(LoginButton_01);
-		
-		RegisterButton_01.setBounds(125, 433, 170, 97);
-		RegisterButton_02.setBounds(125, 433, 170, 97);
-		RegisterButton_03.setBounds(125, 433, 170, 97);
-		background.add(RegisterButton_01);*/
 	}
 	
 	public void initialize()
@@ -122,7 +96,6 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 	public void Repaint()
 	{
 		
-		//System.out.println(mouseX + " " + mouseY);
 		Graphics g = strat.getDrawGraphics();
 		paintComponents(g);
 		Draw(g);
@@ -198,12 +171,10 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 	public void mousePressed(MouseEvent e) {
 		if(((mouseX >= 499) && (mouseX <=  669)) && ((mouseY >= 433)&&( mouseY <= 530))){
 			login_button_pressed = true;
-			System.out.println("xdd");
 		}
 		
 		if(((mouseX >= 125) && (mouseX <=  295)) && ((mouseY >= 433)&&( mouseY <= 530))){
 			register_button_pressed = true;
-			System.out.println("xddppp");
 		}
 		Repaint();
 	}
@@ -212,7 +183,6 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 	public void mouseReleased(MouseEvent e) {
 		login_button_pressed = false;
 		register_button_pressed = false;
-		System.out.println("hey");
 		Repaint();
 	}
 

@@ -14,22 +14,12 @@ public class Main
 		Frame frame = new Frame();
 		frame.setSize(1020, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.initialize();
 		frame.setVisible(true);
+		frame.initialize();
 		
 		LoginWindow loginframe = new LoginWindow();
 		loginframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		loginframe.initialize();
 		loginframe.setVisible(true);
-
-
-		/*while(true)
-		{
-			thread
-			frame.Update();
-			frame.Repaint();
-			-> FÜHRT zu freezes
-		}*/
-		
+		loginframe.initialize();		
 	}
 }
