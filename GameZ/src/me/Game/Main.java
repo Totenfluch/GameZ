@@ -7,6 +7,7 @@ import me.security.LoginWindow;
 public class Main 
 {
 	public static boolean devbuild = false;
+	public static double Version = 1.0;
 	
 	public static void main(String [ ] args)
 	{
@@ -21,17 +22,14 @@ public class Main
 		loginframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		loginframe.initialize();
 
-		while(true)
+
+		/*while(true)
 		{
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			thread
 			frame.Update();
 			frame.Repaint();
-			loginframe.Update();
-			loginframe.Repaint();
-		}
+			-> FÜHRT zu freezes
+		}*/
+		
 	}
 }

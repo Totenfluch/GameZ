@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
@@ -14,11 +15,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
@@ -29,9 +32,9 @@ import javax.swing.border.Border;
 import me.Game.Main;
 import me.Other.*;
 
-public class LoginWindow extends JFrame implements MouseListener, KeyListener{
-	private JTextField Username;
-	private JPasswordField Password;
+public class LoginWindow extends JFrame implements MouseListener, KeyListener, MouseMotionListener{
+	private JComponent Username;
+	private JComponent Password;
 	private JButton loginbutton;
 	private JButton overridelogin;
 	private JButton createAccount;
@@ -45,9 +48,11 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener{
 	private JLabel RegisterButton_03;
 	private JLabel background;
 	private int mouseX, mouseY;
-	
+	private boolean login_button_pressed=false, register_button_pressed=false;
+	private JLabel version;
+
 	public LoginWindow(){
-		setSize(800, 600);
+		setSize(806, 629);
 		setResizable(false);
 
 		
@@ -58,6 +63,10 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener{
 		
 		background.setLayout(null);
 		
+		version = new JLabel("Epic Login Version: " + String.valueOf(Main.Version));
+		version.setForeground(Color.WHITE);
+		version.setBounds(12, 606, 100, 20);
+		background.add(version);
 		
 		Username = new JTextField("", 20);
 		Username.setForeground(Color.WHITE);
@@ -75,7 +84,7 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener{
 		Password.setFont(new Font("Serif", Font.BOLD, 25));
 		background.add(Password);
 		
-		LoginButton_01=new JLabel(ResourceLoader.Iconload("/login_01.jpg"));
+		/*LoginButton_01=new JLabel(ResourceLoader.Iconload("/login_01.jpg"));
 		LoginButton_02=new JLabel(ResourceLoader.Iconload("/login_02.jpg"));
 		LoginButton_03=new JLabel(ResourceLoader.Iconload("/login_03.jpg"));
 		RegisterButton_01=new JLabel(ResourceLoader.Iconload("/register_01.jpg"));
@@ -90,7 +99,7 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener{
 		RegisterButton_01.setBounds(125, 433, 170, 97);
 		RegisterButton_02.setBounds(125, 433, 170, 97);
 		RegisterButton_03.setBounds(125, 433, 170, 97);
-		background.add(RegisterButton_01);
+		background.add(RegisterButton_01);*/
 	}
 	
 	public void initialize()
@@ -100,6 +109,7 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener{
 		addKeyListener(this);
 		requestFocus();
 		addMouseListener(this);
+		addMouseMotionListener(this);
 
 	}
 
@@ -113,8 +123,8 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener{
 	{
 		
 		//System.out.println(mouseX + " " + mouseY);
-		
 		Graphics g = strat.getDrawGraphics();
+		paintComponents(g);
 		Draw(g);
 		g.dispose();
 		
@@ -123,21 +133,25 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener{
 
 	public void Update()
 	{
+		
 	}
 
 	public void Draw(Graphics g)
 	{
-		g.drawImage(ResourceLoader.ImageLoad("/main_01.jpg"), 0, 0, null);
-		
-		PointerInfo a = MouseInfo.getPointerInfo();
-		Point point = new Point(a.getLocation());
-		int mouseX = (int) point.getX()-3;
-		int mouseY = (int) point.getY()-25;
-		if(((mouseX >= 499) && (mouseX <=  669)) && ((mouseY >= 433)&&( mouseY <= 530))){
-			g.drawImage(ResourceLoader.ImageLoad("/login_02.jpg"), 499, 430, null);
-			System.out.println("true");
+		if(((mouseX >= 499) && (mouseX <=  669)) && ((mouseY >= 433)&&( mouseY <= 530))  && login_button_pressed == false && register_button_pressed == false){
+			g.drawImage(ResourceLoader.ImageLoad("/login_02.jpg"), 502, 459, null);
+		}else if(login_button_pressed == true){
+			g.drawImage(ResourceLoader.ImageLoad("/login_03.jpg"), 502, 459, null);
 		}else{
-			g.drawImage(ResourceLoader.ImageLoad("/login_01.jpg"), 499, 430, null);
+			g.drawImage(ResourceLoader.ImageLoad("/login_01.jpg"), 502, 459, null);
+		}
+		
+		if(((mouseX >= 125) && (mouseX <=  295)) && ((mouseY >= 433)&&( mouseY <= 530)) && login_button_pressed == false && register_button_pressed == false){
+			g.drawImage(ResourceLoader.ImageLoad("/register_02.jpg"), 125, 459, null);
+		}else if(register_button_pressed == true){
+			g.drawImage(ResourceLoader.ImageLoad("/register_03.jpg"), 125, 459, null);
+		}else{
+			g.drawImage(ResourceLoader.ImageLoad("/register_01.jpg"), 125, 459, null);
 		}
 	}
 	
@@ -145,17 +159,6 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener{
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
-			if(event.getSource() == loginbutton){
-				
-			}
-			
-			if(event.getSource() == overridelogin){
-				
-			}
-			
-			if(event.getSource() == createAccount){
-				
-			}
 		
 		}
 		
@@ -163,9 +166,9 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener{
 	
 	public void mouseMoved(MouseEvent event)
 	{
-	    mouseY = event.getY()-25;
+	    mouseY = event.getY()-26;
 	    mouseX = event.getX()-3;
-	    System.out.println(mouseY + " " + mouseX);
+	    Repaint();
 	}
 	
 	@Override
@@ -173,9 +176,10 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener{
 		PointerInfo a = MouseInfo.getPointerInfo();
 		Point point = new Point(a.getLocation());
 		SwingUtilities.convertPointFromScreen(point, e.getComponent());
-		double mouseX = (int) point.getX()-3;
-		double mouseY = (int) point.getY()-25;	
-		System.out.println("Mouse clicked! X: " + mouseX + " Y: " + mouseY);
+		double mouseX = (int) point.getX();
+		double mouseY = (int) point.getY();	
+		System.out.println("(ContainerPos) Mouse clicked! X: " + mouseX + " Y: " + mouseY);
+		Repaint();
 	}
 
 	@Override
@@ -192,18 +196,29 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener{
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		if(((mouseX >= 499) && (mouseX <=  669)) && ((mouseY >= 433)&&( mouseY <= 530))){
+			login_button_pressed = true;
+			System.out.println("xdd");
+		}
 		
+		if(((mouseX >= 125) && (mouseX <=  295)) && ((mouseY >= 433)&&( mouseY <= 530))){
+			register_button_pressed = true;
+			System.out.println("xddppp");
+		}
+		Repaint();
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		
+		login_button_pressed = false;
+		register_button_pressed = false;
+		System.out.println("hey");
+		Repaint();
 	}
 
 	@Override
 	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		Repaint(); 
 	}
 
 	@Override
@@ -214,6 +229,12 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener{
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}
