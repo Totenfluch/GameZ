@@ -27,7 +27,10 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 	int mousemoveX = 0;
 	int mousemoveY = 0;
 	RainParticle[] particles = new RainParticle[1000];
-
+    int FPS = 0;
+    int FPSCount = 0;
+    long FPSStartTime = 0;
+    
 	public Frame()
 	{
 		super("Game");
@@ -66,7 +69,15 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		Draw(g);
 		g.dispose();
 		
-
+		FPSCount++;
+		if(System.currentTimeMillis()-FPSStartTime >= 1000)
+		{
+		 FPS = FPSCount;
+		 FPSCount = 0;
+		 System.out.println("FPS: " + FPS);
+		 FPSStartTime = System.currentTimeMillis();
+		}
+		
 		strat.show();		
 	}
 
