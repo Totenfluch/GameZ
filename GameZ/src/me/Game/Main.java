@@ -37,7 +37,7 @@ public class Main
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.initialize();
-	    timer = new Timer (50, new ActionListener(){
+	    timer = new Timer (17, new ActionListener(){
 	        public void actionPerformed(ActionEvent e) {
 	            frame.Repaint();
 	            frame.Update();
