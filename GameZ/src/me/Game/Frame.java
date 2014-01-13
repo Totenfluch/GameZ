@@ -22,12 +22,11 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 	private BufferStrategy strat;
 	private int JHeight, JWidth;
-	private Random rand = new Random();
 	int mouseX = 0;
 	int mouseY = 0;
 	int mousemoveX = 0;
 	int mousemoveY = 0;
-	int invasionX = 60;
+	RainParticle[] particles = new RainParticle[1000];
 
 	public Frame()
 	{
@@ -47,6 +46,11 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		requestFocus();
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		
+		for(int i = 0; i < particles.length; i++)
+		{
+		   particles[i] = new RainParticle(JWidth, JHeight);
+		}
 	}
 
 	public void makestrat()
@@ -68,57 +72,18 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 	public void Update()
 	{
-		invasionX = invasionX + OtherStuff.randInt(0, 6);
-		invasionX++;
-		if(invasionX > 905){
-			invasionX = 0;
-		}
-		
-		if((invasionX - mousemoveX < 20 && invasionX - mousemoveX > -20)){
-			System.out.println("hi");
-		}
 	}
 
 	public void Draw(Graphics g)
 	{
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, JWidth, JHeight);
-
-		g.setColor(Color.GREEN);
-		g.fillRect(100, 100, 400, 100);
 		
-		g.setColor(Color.BLUE);
-		g.fillOval(mousemoveX-5, mousemoveY-5, 15, 15);
-		
-		g.setColor(Color.RED);
-		g.fillOval(invasionX+5, 60, 15, 15);
-		
-		g.setColor(Color.RED);
-		g.fillOval(invasionX-2, 120, 15, 15);
-		
-		g.setColor(Color.RED);
-		g.fillOval(invasionX+1, 180, 15, 15);
-		
-		g.setColor(Color.RED);
-		g.fillOval(invasionX, 240, 15, 15);
-		
-		g.setColor(Color.RED);
-		g.fillOval(invasionX+7, 300, 15, 15);
-		
-		g.setColor(Color.RED);
-		g.fillOval(invasionX-6, 360, 15, 15);
-		
-		g.setColor(Color.RED);
-		g.fillOval(invasionX+2, 420, 15, 15);
-		
-		g.setColor(Color.RED);
-		g.fillOval(invasionX+1, 480, 15, 15);
-		
-		g.setColor(Color.RED);
-		g.fillOval(invasionX-7, 540, 15, 15);
-		
-		g.setColor(Color.RED);
-		g.fillOval(invasionX+4, 600, 15, 15);
+		for(int i = 0; i < particles.length; i++)
+		{
+		   particles[i].Update(JHeight);
+		   particles[i].Draw(g);
+		}
 	}
 
 	@Override
