@@ -9,19 +9,25 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-public class Frame extends JFrame implements KeyListener, MouseListener{
+import me.Other.OtherStuff;
+
+public class Frame extends JFrame implements KeyListener, MouseListener, MouseMotionListener{
 
 	private BufferStrategy strat;
 	private int JHeight, JWidth;
 	private Random rand = new Random();
 	int mouseX = 0;
 	int mouseY = 0;
+	int mousemoveX = 0;
+	int mousemoveY = 0;
+	int invasionX = 60;
 
 	public Frame()
 	{
@@ -40,7 +46,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener{
 		addKeyListener(this);
 		requestFocus();
 		addMouseListener(this);
-
+		addMouseMotionListener(this);
 	}
 
 	public void makestrat()
@@ -52,6 +58,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener{
 	public void Repaint()
 	{
 		Graphics g = strat.getDrawGraphics();
+		super.paintComponents(g);
 		Draw(g);
 		g.dispose();
 		
@@ -61,6 +68,15 @@ public class Frame extends JFrame implements KeyListener, MouseListener{
 
 	public void Update()
 	{
+		invasionX = invasionX + OtherStuff.randInt(0, 6);
+		invasionX++;
+		if(invasionX > 905){
+			invasionX = 0;
+		}
+		
+		if((invasionX - mousemoveX < 20 && invasionX - mousemoveX > -20)){
+			System.out.println("hi");
+		}
 	}
 
 	public void Draw(Graphics g)
@@ -70,6 +86,39 @@ public class Frame extends JFrame implements KeyListener, MouseListener{
 
 		g.setColor(Color.GREEN);
 		g.fillRect(100, 100, 400, 100);
+		
+		g.setColor(Color.BLUE);
+		g.fillOval(mousemoveX-5, mousemoveY-5, 15, 15);
+		
+		g.setColor(Color.RED);
+		g.fillOval(invasionX+5, 60, 15, 15);
+		
+		g.setColor(Color.RED);
+		g.fillOval(invasionX-2, 120, 15, 15);
+		
+		g.setColor(Color.RED);
+		g.fillOval(invasionX+1, 180, 15, 15);
+		
+		g.setColor(Color.RED);
+		g.fillOval(invasionX, 240, 15, 15);
+		
+		g.setColor(Color.RED);
+		g.fillOval(invasionX+7, 300, 15, 15);
+		
+		g.setColor(Color.RED);
+		g.fillOval(invasionX-6, 360, 15, 15);
+		
+		g.setColor(Color.RED);
+		g.fillOval(invasionX+2, 420, 15, 15);
+		
+		g.setColor(Color.RED);
+		g.fillOval(invasionX+1, 480, 15, 15);
+		
+		g.setColor(Color.RED);
+		g.fillOval(invasionX-7, 540, 15, 15);
+		
+		g.setColor(Color.RED);
+		g.fillOval(invasionX+4, 600, 15, 15);
 	}
 
 	@Override
@@ -94,7 +143,6 @@ public class Frame extends JFrame implements KeyListener, MouseListener{
 		mouseX = (int) point.getX();
 		mouseY = (int) point.getY();	
 		System.out.println("Mouse clicked! X: " + point.getX() + " Y: " + point.getY());
-
 	}
 
 	@Override
@@ -111,5 +159,16 @@ public class Frame extends JFrame implements KeyListener, MouseListener{
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		mousemoveX = e.getX();
+		mousemoveY = e.getY();
+		Repaint();
 	}	
 }

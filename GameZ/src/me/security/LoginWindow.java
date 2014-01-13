@@ -183,6 +183,10 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
+		if(login_button_pressed == true){
+			Login.LogMeIn();
+		}
+		
 		login_button_pressed = false;
 		register_button_pressed = false;
 		Repaint();
