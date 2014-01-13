@@ -5,7 +5,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
@@ -16,11 +15,9 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.event.WindowListener;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -28,7 +25,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
 
 import me.Game.Main;
 import me.Other.*;
@@ -36,7 +32,6 @@ import me.Other.*;
 public class LoginWindow extends JFrame implements MouseListener, KeyListener, MouseMotionListener{
 	private JComponent Username;
 	private JComponent Password;
-	private JLabel or;
 	private BufferStrategy strat;
 	private JLabel background;
 	private int mouseX, mouseY;
@@ -47,6 +42,7 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 	public LoginWindow(){
 		setSize(806, 629);
 		setResizable(false);
+		setLocationRelativeTo(null);
 
 		
 		setLayout(new BorderLayout());
@@ -56,9 +52,10 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 		
 		background.setLayout(null);
 		
-		version = new JLabel("Epic Login Version: " + String.valueOf(Main.Version));
+		version = new JLabel("Epic Login V " + Main.Version);
 		version.setForeground(Color.WHITE);
-		version.setBounds(12, 606, 100, 20);
+		version.setFont(new Font("Serif", Font.BOLD, 12));
+		version.setBounds(5, 555, 100, 60);
 		background.add(version);
 		
 		MOTD = new JTextArea("Welcome to the Epic Login!\n");
@@ -85,13 +82,11 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 	
 	public void initialize()
 	{
-		makestrat();
-
 		addKeyListener(this);
 		requestFocus();
 		addMouseListener(this);
 		addMouseMotionListener(this);
-
+		makestrat();
 	}
 
 	public void makestrat()

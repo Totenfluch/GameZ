@@ -2,6 +2,7 @@ package me.Game;
 
 import javax.swing.JFrame;
 
+import me.Other.OtherStuff;
 import me.security.LoginWindow;
 
 public class Main 
@@ -14,12 +15,13 @@ public class Main
 		Frame frame = new Frame();
 		frame.setSize(1020, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
-		frame.initialize();
+		frame.setVisible(false);
+		//frame.initialize();
 		
 		LoginWindow loginframe = new LoginWindow();
 		loginframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		loginframe.setVisible(true);
-		loginframe.initialize();		
+		loginframe.initialize();	
+		OtherStuff.GetMOTD();
 	}
 }
