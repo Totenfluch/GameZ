@@ -83,6 +83,10 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 	public void Update()
 	{
+		for(int i = 0; i < particles.length; i++)
+		{
+		   particles[i].Update(JHeight);
+		}
 	}
 
 	public void Draw(Graphics g)
@@ -92,7 +96,6 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		
 		for(int i = 0; i < particles.length; i++)
 		{
-		   particles[i].Update(JHeight);
 		   particles[i].Draw(g);
 		}
 	}
