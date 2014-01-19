@@ -1,6 +1,7 @@
 package me.Game;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.MouseInfo;
@@ -162,8 +163,40 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 					lost = true;
 					Repaint();
 					double diff = Score/ticks;
-					JOptionPane.showMessageDialog(null, "You Faggot Lost!\n You scored: " + Score + " Points\nIn " + ticks + " ticks.\n" + "Average Difficulty: " + diff );
-					System.exit(1);
+
+					Object[] options = {"Retry",
+					"Quit"};
+					int n = JOptionPane.showOptionDialog(null,
+							"You Faggot Lost!\nYou scored: " + Score + " Points\nIn " + ticks + " ticks.\n" + "Average Difficulty: " + diff ,
+							"Question",
+							JOptionPane.YES_NO_OPTION,
+							JOptionPane.QUESTION_MESSAGE,
+							null,
+							options,
+							options[0]);
+					
+					if(n == 0){
+						Score = 1;
+						Scoreold = 0;
+						ticks = 0;
+						lost = false;
+						gamespeed = 3;
+						for(int i = 0; i < 50; i++){
+							for(int b = 0; b < 2; b++){
+								Destroyer[i][b] = OtherStuff.randInt(100, 600);
+								System.out.println("Row: "+ i + " digit: " + b  + " = " + Destroyer[i][b]);
+							}
+						}
+						
+						for(int i = 0; i < 50; i++){
+							for(int b = 0; b < 2; b++){
+								Destroyer2[i][b] = OtherStuff.randInt(100, 600);
+								System.out.println("Row: "+ i + " digit: " + b  + " = " + Destroyer[i][b]);
+							}
+						}
+					}else{
+						System.exit(1);
+					}
 				}
 			}
 		
