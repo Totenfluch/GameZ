@@ -11,11 +11,12 @@ import me.security.LoginWindow;
 
 public class Main 
 {
-	public static boolean devbuild = false;
+	public static boolean devbuild = true;
 	public static double Version = 1.0;
 	private static LoginWindow loginframe;
 	private static Timer timer = null;
 	private static Timer timer2 = null;
+	
 	
 	public static void main(String [ ] args)
 	{	
@@ -37,7 +38,7 @@ public class Main
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.initialize();
-	    timer = new Timer (17, new ActionListener(){
+	    timer = new Timer (10, new ActionListener(){
 	        public void actionPerformed(ActionEvent e) {
 	            frame.Repaint();
 	            frame.Update();

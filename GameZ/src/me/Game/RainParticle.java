@@ -16,6 +16,7 @@ public class RainParticle
 	public float DrawPositionX = 0;
 	public float DrawPositionY = 0;
 	
+	
 	public RainParticle(int Width, int Height)
 	{
 	  PosX = OtherStuff.randInt(0, Width);

@@ -30,8 +30,8 @@ import me.Game.Main;
 import me.Other.*;
 
 public class LoginWindow extends JFrame implements MouseListener, KeyListener, MouseMotionListener{
-	private JComponent Username;
-	private JComponent Password;
+	private JTextField Username;
+	private JPasswordField Password;
 	private BufferStrategy strat;
 	private JLabel background;
 	private int mouseX, mouseY;
@@ -184,7 +184,8 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		if(login_button_pressed == true){
-			Login.LogMeIn();
+			char[] sPasswordfield = Password.getPassword();
+			Login.LogMeIn(Username.getText(), String.valueOf(sPasswordfield));
 		}
 		
 		login_button_pressed = false;

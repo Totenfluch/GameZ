@@ -1,6 +1,7 @@
 package me.Game;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.Point;
@@ -13,7 +14,10 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import me.Other.OtherStuff;
@@ -26,16 +30,48 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 	int mouseY = 0;
 	int mousemoveX = 0;
 	int mousemoveY = 0;
-	RainParticle[] particles = new RainParticle[1000];
-    int FPS = 0;
-    int FPSCount = 0;
-    long FPSStartTime = 0;
-    
+	RainParticle[] particles = new RainParticle[100];
+	int FPS = 0;
+	int FPSCount = 0;
+	int gamespeed = 3;
+	
+	long FPSStartTime = 0;
+	public static int[][] Destroyer = new int[50][2];
+	public static int[][] Destroyer2 = new int[50][2];
+	private int Score = 1;
+	private int Scoreold = 0;
+	private JLabel ScoreLabel;
+	private int ticks = 0;
+	private boolean lost = false;
+
 	public Frame()
 	{
 		super("Game");
 		setResizable(false);
 		setLocationRelativeTo(null);
+		setLayout(null);
+		
+		/*super.setBackground(Color.black);
+		
+		ScoreLabel = new JLabel("Score: " + Score);
+		ScoreLabel.setForeground(Color.PINK);
+		ScoreLabel.setBounds(482, 78, 200, 25);
+		ScoreLabel.setFont(new Font("Serif", Font.BOLD, 25));
+		add(ScoreLabel);*/
+
+		for(int i = 0; i < 50; i++){
+			for(int b = 0; b < 2; b++){
+				Destroyer[i][b] = OtherStuff.randInt(100, 600);
+				System.out.println("Row: "+ i + " digit: " + b  + " = " + Destroyer[i][b]);
+			}
+		}
+		
+		for(int i = 0; i < 50; i++){
+			for(int b = 0; b < 2; b++){
+				Destroyer2[i][b] = OtherStuff.randInt(100, 600);
+				System.out.println("Row: "+ i + " digit: " + b  + " = " + Destroyer[i][b]);
+			}
+		}
 	}
 
 	public void initialize()
@@ -49,10 +85,10 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		requestFocus();
 		addMouseListener(this);
 		addMouseMotionListener(this);
-		
+
 		for(int i = 0; i < particles.length; i++)
 		{
-		   particles[i] = new RainParticle(JWidth, JHeight);
+			particles[i] = new RainParticle(JWidth, JHeight);
 		}
 	}
 
@@ -65,28 +101,84 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 	public void Repaint()
 	{
 		Graphics g = strat.getDrawGraphics();
-		super.paintComponents(g);
+		paintComponents(g);
 		Draw(g);
 		g.dispose();
-		
+
 		FPSCount++;
 		if(System.currentTimeMillis()-FPSStartTime >= 1000)
 		{
-		 FPS = FPSCount;
-		 FPSCount = 0;
-		 System.out.println("FPS: " + FPS);
-		 FPSStartTime = System.currentTimeMillis();
+			FPS = FPSCount;
+			FPSCount = 0;
+			System.out.println("FPS: " + FPS);
+			FPSStartTime = System.currentTimeMillis();
 		}
-		
+
 		strat.show();		
 	}
 
 	public void Update()
 	{
+		for(int i = 0; i < 50; i++){
+			for(int b = 0; b < 2; b++){
+				Destroyer[i][b] = Destroyer[i][b] + OtherStuff.randInt(1, gamespeed);
+
+				if(Destroyer[i][0] > 1020){
+					Destroyer[i][0] = 0;
+				}else if(Destroyer[i][0] < 0){
+					Destroyer[i][0] = 1020;
+				}
+
+				if(Destroyer[i][1] > 600){
+					Destroyer[i][1] = 0;
+				}else if(Destroyer[i][1] < 0){
+					Destroyer[i][1] = 600;
+				}
+			}
+		
+		}
+		
+		for(int i = 0; i < 50; i++){
+			for(int b = 0; b < 2; b++){
+				Destroyer2[i][b] = Destroyer2[i][b] - OtherStuff.randInt(1, gamespeed);
+
+				if(Destroyer2[i][0] > 1020){
+					Destroyer2[i][0] = 0;
+				}else if(Destroyer2[i][0] < 0){
+					Destroyer2[i][0] = 1020;
+				}
+
+				if(Destroyer2[i][1] > 600){
+					Destroyer2[i][1] = 0;
+				}else if(Destroyer2[i][1] < 0){
+					Destroyer2[i][1] = 600;
+				}
+			}
+		}
+		
+			for(int c = 0; c < 50; c++){
+				if(((Destroyer[c][0] - mousemoveX < 5 && Destroyer[c][0] - mousemoveX > -5) && (Destroyer[c][1] - mousemoveY < 5 && Destroyer[c][1] - mousemoveY > -5))
+				  || ((Destroyer2[c][0] - mousemoveX < 5 && Destroyer2[c][0] - mousemoveX > -5) && (Destroyer2[c][1] - mousemoveY < 5 && Destroyer2[c][1] - mousemoveY > -5 ))){
+					lost = true;
+					Repaint();
+					double diff = Score/ticks;
+					JOptionPane.showMessageDialog(null, "You Faggot Lost!\n You scored: " + Score + " Points\nIn " + ticks + " ticks.\n" + "Average Difficulty: " + diff );
+					System.exit(1);
+				}
+			}
+		
+
 		for(int i = 0; i < particles.length; i++)
 		{
-		   particles[i].Update(JHeight);
+			particles[i].Update(JHeight);
 		}
+		if(Score-1 != Scoreold){
+			JOptionPane.showMessageDialog(null, "CHEATENGINE GAYYYYYYYYYYYY");
+			System.exit(1);
+		}
+		Score = Score+gamespeed;
+		Scoreold = Scoreold+gamespeed;
+		ticks++;
 	}
 
 	public void Draw(Graphics g)
@@ -94,24 +186,56 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, JWidth, JHeight);
 		
+		g.setColor(Color.pink);
+		g.drawString("Score: " + Score, 480, 50);
+		g.drawString("Gamespeed: " + gamespeed + "  Adjust with 1 & 2 (more speed more score!)", 480, 60);
+		
+		if(lost == true){
+			g.setColor(Color.CYAN);
+			g.fillOval(mousemoveX, mousemoveY, 10, 10);
+		}
+
+		for(int i = 0; i < 50; i++){
+			g.setColor(Color.RED);
+			g.fillOval(Destroyer[i][0], Destroyer[i][1], 10, 10);
+		}
+		
+		for(int i = 0; i < 50; i++){
+			g.setColor(Color.YELLOW);
+			g.fillOval(Destroyer2[i][0], Destroyer2[i][1], 10, 10);
+		}
+
 		for(int i = 0; i < particles.length; i++)
 		{
-		   particles[i].Draw(g);
+			particles[i].Draw(g);
 		}
 	}
 
 	@Override
-	public void keyPressed(KeyEvent keyState) {
+	public void keyPressed(KeyEvent e) {
+		int key = e.getKeyCode();
+		if(key == KeyEvent.VK_1){
+			System.out.println("ddd");
+			if(gamespeed < 50){
+				gamespeed++;
+			}
+		}
+		if(key == KeyEvent.VK_2){
+			System.out.println("dddf");
+			if(gamespeed >= 3){
+				gamespeed--;
+			}
+		}
 	}
 
 	@Override
-	public void keyReleased(KeyEvent keyState) {
+	public void keyReleased(KeyEvent e) {
 	}
 
 	@Override
-	public void keyTyped(KeyEvent keyState) {
-		System.out.println("Char: " + keyState.getKeyChar() + " Code: " +keyState.getKeyCode());
-		ClientTest test = new ClientTest();
+	public void keyTyped(KeyEvent e) {
+		System.out.println("Char: " + e.getKeyChar() + " Code: " + e.getKeyCode());
+		//ClientTest test = new ClientTest();
 	}
 
 	@Override
