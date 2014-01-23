@@ -12,14 +12,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Random;
 
+import me.Totenfluch.TServerClient.Client;
 import me.security.LoginWindow;
 
-
-
-
-
 public class OtherStuff {
-
+	public static boolean ServerConnection = false;
+	
 	public static void openwebsite(String url){
 		try {
 			Desktop dt = Desktop.getDesktop();
@@ -108,5 +106,19 @@ public class OtherStuff {
 
 		return randomNum;
 	}
+	
+	public static void PublishScore(int score, String username){
+		if(ServerConnection == false){
+			String host = "188.194.13.44";
+			int port = Integer.parseInt("9977");
+			final Client chatframe = new Client(host, port);
+		}
+		Client.processMessage("/pushscore " + username + " " + score);
+	}
+	
+	public static void pubscpre(int score, String username){
+		Client.processMessage("/pushscore " + username + " " + score);
+	}
+	
 
 }

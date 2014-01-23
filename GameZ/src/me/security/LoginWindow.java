@@ -8,8 +8,6 @@ import java.awt.Graphics;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -18,7 +16,6 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.BorderFactory;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
@@ -30,6 +27,7 @@ import me.Game.Main;
 import me.Other.*;
 
 public class LoginWindow extends JFrame implements MouseListener, KeyListener, MouseMotionListener{
+	private static final long serialVersionUID = 1L;
 	private JTextField Username;
 	private JPasswordField Password;
 	private BufferStrategy strat;
@@ -130,14 +128,14 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 		}
 	}
 	
-	private class thehandler implements ActionListener{
+	/*private class thehandler implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent event) {
 		
 		}
 		
-	}
+	}*/
 	
 	public void mouseMoved(MouseEvent event)
 	{

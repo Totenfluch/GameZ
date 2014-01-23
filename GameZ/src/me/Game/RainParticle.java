@@ -2,8 +2,6 @@ package me.Game;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.Vector;
-
 import me.Other.OtherStuff;
 
 public class RainParticle 
