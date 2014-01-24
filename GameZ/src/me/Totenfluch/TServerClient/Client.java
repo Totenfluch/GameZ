@@ -72,8 +72,7 @@ public class Client extends JFrame implements Runnable
 				e1.printStackTrace();
 			}
 
-			JOptionPane.showMessageDialog(null, "Couldn't connect to the Master Server. Shutting down."); 
-			System.exit(0);
+			JOptionPane.showMessageDialog(null, "Couldn't connect to the Master Server.\nHight Scores/Server Backup won't be available this session\nRestart the Game to try to reconnect."); 
 		}
 	}
 

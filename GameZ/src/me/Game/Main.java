@@ -2,6 +2,7 @@ package me.Game;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -38,9 +39,20 @@ public class Main
 		loginframe.initialize();
 		OtherStuff.GetMOTD();
 		
+		
 		String host = "188.194.13.44";
 		int port = Integer.parseInt("9977");
 		final Client chatframe = new Client(host, port);
+		
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run() {
+					try {
+						Client.socket.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+		});
 	}
 	
 	public static void DisableLoginWindow(){

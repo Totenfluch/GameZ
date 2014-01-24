@@ -112,8 +112,9 @@ public class OtherStuff {
 			String host = "188.194.13.44";
 			int port = Integer.parseInt("9977");
 			final Client chatframe = new Client(host, port);
+		}else{
+			Client.processMessage("/pushscore " + username + " " + score);
 		}
-		Client.processMessage("/pushscore " + username + " " + score);
 	}
 	
 	public static void pubscpre(int score, String username){
