@@ -299,6 +299,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			}*/
 			g.setColor(currentbackground);
 			if(deescalate == 70){
+				Color jp = new Color(150, 150, 150);
 				currentbackground = colorrng[OtherStuff.randInt(0, 10)];
 				g.setColor(currentbackground);
 				deescalate = 0;
@@ -312,7 +313,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 		/*g.setColor(Color.CYAN);
 		TheFox.drawcat(g);*/
-
+		
 		g.setColor(Color.pink);
 		g.drawString("Score: " + Score, 480, 50);
 		g.drawString("Gamespeed: " + gamespeed + "  Adjust with 1 & 2 (more speed more score!)", 480, 60);
@@ -329,7 +330,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			g.setColor(Color.PINK);
 			g.fillOval(GodModePowerupballx, GodModePowerupbally, 10, 10);
 		}
-
+		
 		if(lost == true){
 			g.setColor(Color.CYAN);
 			g.fillOval(mousemoveX, mousemoveY, 10, 10);
@@ -395,6 +396,23 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			}else if(disco == false){
 				disco = true;
 				Client.processMessage("hii2");
+			}
+		}
+		if(key == KeyEvent.VK_ESCAPE){
+			JOptionPane.showMessageDialog(null, "hi");
+			Object[] options = {"Resume",
+					"Quit"};
+			int n = JOptionPane.showOptionDialog(null,
+					"Game Paused",
+					"Question",
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.QUESTION_MESSAGE,
+					null,
+					options,
+					options[0]);
+
+			if(n == 1){
+				System.exit(1);
 			}
 		}
 	}
