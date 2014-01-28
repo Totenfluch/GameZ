@@ -16,14 +16,15 @@ import me.security.LoginWindow;
 public class Main 
 {
 	public static boolean devbuild = true;
-	public static double Version = 1.0;
+	public static double Version = 3.0;
 	private static LoginWindow loginframe;
 	private static Timer timer = null;
 	public static InetAddress ComputerIP;
 	public static String ComputerMac;
 	public static String ComputerName;
+	public static boolean Valid = false;
 	
-	public static void main(String [ ] args)
+	public static void main(String[] args)
 	{	
 		try {
 			ComputerIP = InetAddress.getLocalHost();
@@ -43,6 +44,8 @@ public class Main
 		String host = "188.194.13.44";
 		int port = Integer.parseInt("9977");
 		final Client chatframe = new Client(host, port);
+		
+		OtherStuff.MakeValid();
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {

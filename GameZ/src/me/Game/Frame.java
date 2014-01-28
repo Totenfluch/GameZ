@@ -246,6 +246,28 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 						OtherStuff.PublishScore(Score, Login.ActiveUser);
 						JOptionPane.showMessageDialog(null, "Score published! bye");
 						System.exit(1);
+					}else{
+						Score = 1;
+						Scoreold = 0;
+						ticks = 0;
+						lost = false;
+						gamespeed = 2;
+						DestroyersOnline = 10;
+						Destroyers2Online = 10;
+						tickdiff = 0;
+						GodModePowerupballactive = false;
+						GodModePowerup = false;
+						for(int i = 0; i < 50; i++){
+							for(int b = 0; b < 2; b++){
+								Destroyer[i][b] = OtherStuff.randInt(100, 600);
+							}
+						}
+
+						for(int i = 0; i < 50; i++){
+							for(int b = 0; b < 2; b++){
+								Destroyer2[i][b] = OtherStuff.randInt(100, 600);
+							}
+						}
 					}
 				}else if(((GodModePowerupballx - mousemoveX < 5 && GodModePowerupballx - mousemoveX > -5) && (GodModePowerupbally - mousemoveY < 5 && GodModePowerupbally - mousemoveY > -5))  && GodModePowerupballactive == true){
 					GodModePowerupballactive = false;
@@ -260,21 +282,31 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		{
 			particles[i].Update(JHeight);
 		}
-		if(Score-1 != Scoreold || GodMode != 300){
+		if(Score-1 != Scoreold || GodMode != 300 || tickdiff > ticks+301){
 			JOptionPane.showMessageDialog(null, "CHEATENGINE GAYYYYYYYYYYYY");
 			System.exit(1);
 		}
 		if(GodMode-ticks < 0){
-			Score = Score+gamespeed;
-			Scoreold = Scoreold+gamespeed;
+			if(disco == false){
+				Score = Score+gamespeed;
+				Scoreold = Scoreold+gamespeed;
+			}else if(disco == true){
+				Score = Score+(gamespeed*2);
+				Scoreold = Scoreold+(gamespeed*2);
+			}
+			
+			if(backgroundon == false){
+				Score--;
+				Scoreold--;
+			}
 		}
 		ticks++;
 
 		if(OtherStuff.randInt(1, 150) == 25){
 			Destroyers2Online++;
-		}else if(OtherStuff.randInt(1, 150) == 26){
+		}else if(OtherStuff.randInt(1, 36-gamespeed) == 26){
 			DestroyersOnline++;
-		}else if(OtherStuff.randInt(1, 500) == 125){
+		}else if(OtherStuff.randInt(1, 250*gamespeed) == 125){
 			GodModePowerupballactive = true;
 		}
 
@@ -299,7 +331,6 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			}*/
 			g.setColor(currentbackground);
 			if(deescalate == 70){
-				Color jp = new Color(150, 150, 150);
 				currentbackground = colorrng[OtherStuff.randInt(0, 10)];
 				g.setColor(currentbackground);
 				deescalate = 0;
@@ -313,7 +344,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 		/*g.setColor(Color.CYAN);
 		TheFox.drawcat(g);*/
-		
+
 		g.setColor(Color.pink);
 		g.drawString("Score: " + Score, 480, 50);
 		g.drawString("Gamespeed: " + gamespeed + "  Adjust with 1 & 2 (more speed more score!)", 480, 60);
@@ -330,7 +361,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			g.setColor(Color.PINK);
 			g.fillOval(GodModePowerupballx, GodModePowerupbally, 10, 10);
 		}
-		
+
 		if(lost == true){
 			g.setColor(Color.CYAN);
 			g.fillOval(mousemoveX, mousemoveY, 10, 10);
@@ -373,7 +404,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 	public void keyPressed(KeyEvent e) {
 		int key = e.getKeyCode();
 		if(key == KeyEvent.VK_1){
-			if(gamespeed < 5){
+			if(gamespeed < 10){
 				gamespeed++;
 			}
 		}
@@ -392,14 +423,11 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		if(key == KeyEvent.VK_9){
 			if(disco == true){
 				disco = false;
-				Client.processMessage("hii");
 			}else if(disco == false){
 				disco = true;
-				Client.processMessage("hii2");
 			}
 		}
 		if(key == KeyEvent.VK_ESCAPE){
-			JOptionPane.showMessageDialog(null, "hi");
 			Object[] options = {"Resume",
 					"Quit"};
 			int n = JOptionPane.showOptionDialog(null,

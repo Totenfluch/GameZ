@@ -12,6 +12,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+
+import me.Game.Main;
 import me.Totenfluch.TServerClient.Client;
 import me.security.LoginWindow;
 
@@ -118,6 +121,26 @@ public class OtherStuff {
 	
 	public static void pubscpre(int score, String username){
 		Client.processMessage("/pushscore " + username + " " + score);
+	}
+	
+	public static void MakeValid(){
+		try{
+			URL oracle = new URL("https://dl.dropboxusercontent.com/u/88851086/GameZVersion.txt");
+			BufferedReader in = new BufferedReader(
+					new InputStreamReader(oracle.openStream()));
+
+			String inputLine;
+			while ((inputLine = in.readLine()) != null){
+					if(Double.valueOf(inputLine) == Main.Version){
+						Main.Valid = true;
+					}else{
+						JOptionPane.showMessageDialog(null, "You don't have the newest Version.\nYou can only submit scores if you are using the latest version.\nDownload here:\nhttps://dl.dropboxusercontent.com/u/88851086/GameZ.jar");
+						openwebsite("https://dl.dropboxusercontent.com/u/88851086/GameZ.jar");
+					}
+			}               
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 
