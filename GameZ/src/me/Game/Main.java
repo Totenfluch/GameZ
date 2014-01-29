@@ -16,9 +16,10 @@ import me.security.LoginWindow;
 public class Main 
 {
 	public static boolean devbuild = true;
-	public static double Version = 3.0;
+	public static double Version = 4.0;
 	private static LoginWindow loginframe;
 	private static Timer timer = null;
+	private static Timer logintimer = null;
 	public static InetAddress ComputerIP;
 	public static String ComputerMac;
 	public static String ComputerName;
@@ -38,6 +39,12 @@ public class Main
 		loginframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		loginframe.setVisible(true);
 		loginframe.initialize();
+		logintimer = new Timer (10, new ActionListener(){
+	        public void actionPerformed(ActionEvent e) {
+	            loginframe.Repaint();
+	            loginframe.Update();
+	        }
+	    });
 		OtherStuff.GetMOTD();
 		
 		

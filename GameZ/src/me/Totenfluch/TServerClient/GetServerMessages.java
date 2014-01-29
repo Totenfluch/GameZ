@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 public class GetServerMessages{
 	public static String newestreply = null;
 	public static boolean reconnecting = false;
+	public static boolean ActiveScoreConnection = false;
 
 	public static void CheckServerMessages(String message){
 
@@ -28,6 +29,10 @@ public class GetServerMessages{
 			System.exit(0);
 		}
 		
+		else if(message.startsWith("You are connected to GameZ-Server-1")){
+			ActiveScoreConnection = true;
+		}
+		
 		else if(message.startsWith("ServerIsShuttingDown")){
 			try {
 				Client.socket.close();
@@ -35,6 +40,7 @@ public class GetServerMessages{
 				e.printStackTrace();
 			}
 			reconnecting = true;
+			ActiveScoreConnection = false;
 		}
 		
 		else if(message.startsWith("broadcast")){

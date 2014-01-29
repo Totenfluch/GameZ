@@ -12,7 +12,7 @@ public class Login {
 	public static String ActiveUser;
 
 	public static void LogMeIn(String Username, String Password){
-		if(!Username.contains(" ") && !Username.contains("Hitler") && !Username.contains("Adolf")){
+		if(!Username.contains(" ") && !Username.contains("Hitler") && !Username.contains("Adolf") && !Username.equals("")){
 			if(Main.devbuild == true){
 				/*System.out.println(Username + " " + Password);
 			if(Username.equals(admin) && Password.equals(password)){

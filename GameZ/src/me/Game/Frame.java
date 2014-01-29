@@ -346,15 +346,25 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		TheFox.drawcat(g);*/
 
 		g.setColor(Color.pink);
-		g.drawString("Score: " + Score, 480, 50);
-		g.drawString("Gamespeed: " + gamespeed + "  Adjust with 1 & 2 (more speed more score!)", 480, 60);
-		g.drawString("Destroyers Active: " + String.valueOf(DestroyersOnline+Destroyers2Online), 480, 70);
-		g.drawString("Disable background with '5'", 480, 80);
+		g.drawString("Score: " + Score, 470, 50);
+		g.drawString("(+" +gamespeed + ") Gamespeed: " + gamespeed + "  Adjust with 1 & 2 (more speed more score!)", 470, 60);
+		g.drawString("Destroyers Active: " + String.valueOf(DestroyersOnline+Destroyers2Online), 470, 70);
+		if(backgroundon == true){
+			g.drawString("(+1) Disable background with '5'", 470, 80);
+		}else{
+			g.drawString("(+0) Enable background with '5'", 470, 80);
+		}
+		if(disco == false){
+			g.drawString("(+0) Turn Disco on with '9'", 470, 90);
+		}else{
+			g.drawString("(+Score*2) Disable Disco with '9'", 470, 90);
+		}
+		
 		if(ticks < 300){
-			g.drawString("GodMode Time Left: " + String.valueOf(GodMode-ticks), 480, 90);
+			g.drawString("(Score locked at 1) GodMode Time Left: " + String.valueOf(GodMode-ticks), 470, 100);
 		}else
 			if(GodModePowerup == true){
-				g.drawString("Special Godmode on! for: " + String.valueOf(tickdiff-ticks), 480, 90);
+				g.drawString("(+10) Special Godmode on! for: " + String.valueOf(tickdiff-ticks), 470, 100);
 			}
 
 		if(GodModePowerupballactive == true){
