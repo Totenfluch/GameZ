@@ -12,24 +12,20 @@ public class Login {
 	public static String ActiveUser;
 
 	public static void LogMeIn(String Username, String Password){
-		if(!Username.contains(" ") && !Username.contains("Hitler") && !Username.contains("Adolf") && !Username.equals("")){
+		if(!Username.contains(" ") && !Username.contains("Hitler") && !Username.contains("Adolf") && !Username.equals("") && !Username.contains("-") && !Username.contains("<") && !Username.contains(">") && Username.length() >= 6 && Username.length() <= 12){
 			if(Main.devbuild == true){
-				/*System.out.println(Username + " " + Password);
-			if(Username.equals(admin) && Password.equals(password)){
+				// Don't check password
 				Main.DisableLoginWindow();
 				Main.StartGame();
 				ActiveUser = Username;
 			}else{
-				JOptionPane.showMessageDialog(null, "Incorrect Credicals");
-			}*/
-				Main.DisableLoginWindow();
-				Main.StartGame();
-				ActiveUser = Username;
-			}else{
+				// Check Password here
 				ActiveUser = Username;
 				Main.DisableLoginWindow();
 				Main.StartGame();
 			}
+		}else{
+			JOptionPane.showMessageDialog(null, "White Spaces, swear words/names, '-' '<' '>' in names not allowed. Between 6 and 12 Letters");
 		}
 	}
 }

@@ -17,9 +17,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferStrategy;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -91,6 +89,7 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 		button.setIcon(new ImageIcon(img));
 		button.setBounds(100, 175, 20, 20);
 		background.add(button);
+		
 		thehandler handler = new thehandler();
 		button.addActionListener(handler);
 	}
@@ -100,7 +99,7 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if(arg0.getSource() == button){
-				MOTD.setText("");
+				MOTD.setText("Welcome to the Epic Login!");
 				OtherStuff.GetMOTD();
 			}
 		}
@@ -130,11 +129,6 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 		g.dispose();
 
 		strat.show();
-	}
-
-	public void Update()
-	{
-
 	}
 
 	public void Draw(Graphics g)

@@ -15,8 +15,8 @@ import me.security.LoginWindow;
 
 public class Main 
 {
-	public static boolean devbuild = true;
-	public static double Version = 4.0;
+	public static boolean devbuild = false;
+	public static double Version = 4.2;
 	private static LoginWindow loginframe;
 	private static Timer timer = null;
 	private static Timer logintimer = null;
@@ -24,6 +24,7 @@ public class Main
 	public static String ComputerMac;
 	public static String ComputerName;
 	public static boolean Valid = false;
+	public static boolean GamePaused = false;
 	
 	public static void main(String[] args)
 	{	
@@ -39,17 +40,19 @@ public class Main
 		loginframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		loginframe.setVisible(true);
 		loginframe.initialize();
+		loginframe.Repaint();
 		logintimer = new Timer (10, new ActionListener(){
 	        public void actionPerformed(ActionEvent e) {
 	            loginframe.Repaint();
-	            loginframe.Update();
 	        }
 	    });
+		logintimer.start();
 		OtherStuff.GetMOTD();
 		
 		
 		String host = "188.194.13.44";
 		int port = Integer.parseInt("9977");
+		@SuppressWarnings("unused")
 		final Client chatframe = new Client(host, port);
 		
 		OtherStuff.MakeValid();
@@ -78,10 +81,13 @@ public class Main
 		frame.initialize();
 	    timer = new Timer (10, new ActionListener(){
 	        public void actionPerformed(ActionEvent e) {
-	            frame.Repaint();
-	            frame.Update();
+	        	if(GamePaused == false){
+	        		frame.Repaint();
+	            	frame.Update();
+	        	}
 	        }
 	    });
 	    timer.start();
+	    logintimer.stop();
 	}
 }

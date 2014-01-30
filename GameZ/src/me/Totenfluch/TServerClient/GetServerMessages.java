@@ -7,7 +7,6 @@ import javax.swing.JOptionPane;
 
 public class GetServerMessages{
 	public static String newestreply = null;
-	public static boolean reconnecting = false;
 	public static boolean ActiveScoreConnection = false;
 
 	public static void CheckServerMessages(String message){
@@ -39,13 +38,13 @@ public class GetServerMessages{
 			} catch (IOException e){
 				e.printStackTrace();
 			}
-			reconnecting = true;
 			ActiveScoreConnection = false;
 		}
 		
 		else if(message.startsWith("broadcast")){
-			String msg = message.replace("broadcast", " ");
-			JOptionPane.showMessageDialog(null, message);
+			String msg = message.replace("broadcast", "");
+			msg = message.replace("*", "");
+			JOptionPane.showMessageDialog(null, msg);;
 		}
 
 	}

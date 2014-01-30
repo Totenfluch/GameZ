@@ -17,11 +17,10 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import me.Other.OtherStuff;
-import me.Totenfluch.TServerClient.Client;
 import me.security.Login;
 
 public class Frame extends JFrame implements KeyListener, MouseListener, MouseMotionListener{
-	
+
 	private static final long serialVersionUID = 1L;
 	private BufferStrategy strat;
 	private int JHeight, JWidth;
@@ -30,8 +29,6 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 	int mousemoveX = 0;
 	int mousemoveY = 0;
 	RainParticle[] particles = new RainParticle[100];
-	int FPS = 0;
-	int FPSCount = 0;
 	int gamespeed = 2;
 
 	long FPSStartTime = 0;
@@ -55,10 +52,11 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 	private int deescalate = 0;
 	private Color currentbackground = null;
 	private Color currentdestroyercolor = Color.RED;
+	private int pausediff = 0;
 
 	public Frame()
 	{
-		super("Game");
+		super("The Epic Game");
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setLayout(null);
@@ -106,15 +104,6 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		paintComponents(g);
 		Draw(g);
 		g.dispose();
-
-		/*FPSCount++;
-		if(System.currentTimeMillis()-FPSStartTime >= 1000)
-		{
-			FPS = FPSCount;
-			FPSCount = 0;
-			System.out.println("FPS: " + FPS);
-			FPSStartTime = System.currentTimeMillis();
-		}*/
 
 		strat.show();		
 	}
@@ -181,8 +170,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 						|| ((Destroyer2[c][0] - mousemoveX < 5 && Destroyer2[c][0] - mousemoveX > -5) && (Destroyer2[c][1] - mousemoveY < 5 && Destroyer2[c][1] - mousemoveY > -5 ))){
 					lost = true;
 					Repaint();
-					double diff = Score/ticks;
-
+					double diff = Score/ticks-300;
 
 					Object[] options = {"Retry",
 							"Quit", "Submit Score & Retry", "Submit Score & Quit"};
@@ -196,78 +184,18 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 							options[0]);
 
 					if(n == 0){
-						Score = 1;
-						Scoreold = 0;
-						ticks = 0;
-						lost = false;
-						gamespeed = 2;
-						DestroyersOnline = 10;
-						Destroyers2Online = 10;
-						tickdiff = 0;
-						GodModePowerupballactive = false;
-						GodModePowerup = false;
-						for(int i = 0; i < 50; i++){
-							for(int b = 0; b < 2; b++){
-								Destroyer[i][b] = OtherStuff.randInt(100, 600);
-							}
-						}
-
-						for(int i = 0; i < 50; i++){
-							for(int b = 0; b < 2; b++){
-								Destroyer2[i][b] = OtherStuff.randInt(100, 600);
-							}
-						}
+						RestartGame();
 					}else if(n == 1){
 						System.exit(1);
 					}else if(n == 2){
 						OtherStuff.PublishScore(Score, Login.ActiveUser);
-						Score = 1;
-						Scoreold = 0;
-						ticks = 0;
-						lost = false;
-						gamespeed = 2;
-						DestroyersOnline = 10;
-						Destroyers2Online = 10;
-						tickdiff = 0;
-						GodModePowerupballactive = false;
-						GodModePowerup = false;
-						for(int i = 0; i < 50; i++){
-							for(int b = 0; b < 2; b++){
-								Destroyer[i][b] = OtherStuff.randInt(100, 600);
-							}
-						}
-
-						for(int i = 0; i < 50; i++){
-							for(int b = 0; b < 2; b++){
-								Destroyer2[i][b] = OtherStuff.randInt(100, 600);
-							}
-						}
+						RestartGame();
 					}else if(n == 3){
 						OtherStuff.PublishScore(Score, Login.ActiveUser);
 						JOptionPane.showMessageDialog(null, "Score published! bye");
 						System.exit(1);
 					}else{
-						Score = 1;
-						Scoreold = 0;
-						ticks = 0;
-						lost = false;
-						gamespeed = 2;
-						DestroyersOnline = 10;
-						Destroyers2Online = 10;
-						tickdiff = 0;
-						GodModePowerupballactive = false;
-						GodModePowerup = false;
-						for(int i = 0; i < 50; i++){
-							for(int b = 0; b < 2; b++){
-								Destroyer[i][b] = OtherStuff.randInt(100, 600);
-							}
-						}
-
-						for(int i = 0; i < 50; i++){
-							for(int b = 0; b < 2; b++){
-								Destroyer2[i][b] = OtherStuff.randInt(100, 600);
-							}
-						}
+						RestartGame();
 					}
 				}else if(((GodModePowerupballx - mousemoveX < 5 && GodModePowerupballx - mousemoveX > -5) && (GodModePowerupbally - mousemoveY < 5 && GodModePowerupbally - mousemoveY > -5))  && GodModePowerupballactive == true){
 					GodModePowerupballactive = false;
@@ -286,27 +214,29 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			JOptionPane.showMessageDialog(null, "CHEATENGINE GAYYYYYYYYYYYY");
 			System.exit(1);
 		}
-		if(GodMode-ticks < 0){
-			if(disco == false){
-				Score = Score+gamespeed;
-				Scoreold = Scoreold+gamespeed;
-			}else if(disco == true){
-				Score = Score+(gamespeed*2);
-				Scoreold = Scoreold+(gamespeed*2);
-			}
-			
-			if(backgroundon == false){
-				Score--;
-				Scoreold--;
+		if(pausediff < ticks){
+			if(GodMode-ticks < 0){
+				if(disco == false){
+					Score = Score+gamespeed;
+					Scoreold = Scoreold+gamespeed;
+				}else if(disco == true){
+					Score = Score+(gamespeed*2);
+					Scoreold = Scoreold+(gamespeed*2);
+				}
+
+				if(backgroundon == true){
+					Score++;
+					Scoreold++;
+				}
 			}
 		}
 		ticks++;
 
-		if(OtherStuff.randInt(1, 150) == 25){
+		if(OtherStuff.randInt(1, 500-gamespeed*35) == 25){
 			Destroyers2Online++;
-		}else if(OtherStuff.randInt(1, 36-gamespeed) == 26){
+		}else if(OtherStuff.randInt(1, 500-gamespeed*35) == 26){
 			DestroyersOnline++;
-		}else if(OtherStuff.randInt(1, 250*gamespeed) == 125){
+		}else if(OtherStuff.randInt(1, 250+gamespeed*80) == 125){
 			GodModePowerupballactive = true;
 		}
 
@@ -315,20 +245,34 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		}
 	}
 
+	public void RestartGame(){
+		Score = 1;
+		Scoreold = 0;
+		ticks = 0;
+		lost = false;
+		gamespeed = 2;
+		DestroyersOnline = 10;
+		Destroyers2Online = 10;
+		tickdiff = 0;
+		GodModePowerupballactive = false;
+		GodModePowerup = false;
+		for(int i = 0; i < 50; i++){
+			for(int b = 0; b < 2; b++){
+				Destroyer[i][b] = OtherStuff.randInt(100, 600);
+			}
+		}
+
+		for(int i = 0; i < 50; i++){
+			for(int b = 0; b < 2; b++){
+				Destroyer2[i][b] = OtherStuff.randInt(100, 600);
+			}
+		}
+	}
+
 	public void Draw(Graphics g)
 	{
 		if(disco == true){
 
-			/*int b = OtherStuff.randInt(0, 3);
-			if(b == 0){
-				g.setColor(Color.BLACK);
-			}else if(b == 1){
-				g.setColor(Color.GRAY);
-			}else if(b == 2){
-				g.setColor(Color.darkGray);
-			}else if(b == 3){
-				g.setColor(Color.DARK_GRAY);
-			}*/
 			g.setColor(currentbackground);
 			if(deescalate == 70){
 				currentbackground = colorrng[OtherStuff.randInt(0, 10)];
@@ -341,9 +285,6 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			g.setColor(Color.BLACK);
 		}
 		g.fillRect(0, 0, JWidth, JHeight);
-
-		/*g.setColor(Color.CYAN);
-		TheFox.drawcat(g);*/
 
 		g.setColor(Color.pink);
 		g.drawString("Score: " + Score, 470, 50);
@@ -359,12 +300,18 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		}else{
 			g.drawString("(+Score*2) Disable Disco with '9'", 470, 90);
 		}
-		
+
+		if(pausediff > ticks){
+			g.drawString("No score for " + String.valueOf(pausediff-ticks), 470, 100);
+		}else{
+			g.drawString("Press ESC for Pause (5s no Score)", 470, 100);
+		}
+
 		if(ticks < 300){
-			g.drawString("(Score locked at 1) GodMode Time Left: " + String.valueOf(GodMode-ticks), 470, 100);
+			g.drawString("(Score locked at 1) GodMode Time Left: " + String.valueOf(GodMode-ticks), 470, 110);
 		}else
 			if(GodModePowerup == true){
-				g.drawString("(+10) Special Godmode on! for: " + String.valueOf(tickdiff-ticks), 470, 100);
+				g.drawString("(+10) Special Godmode on! for: " + String.valueOf(tickdiff-ticks), 470, 110);
 			}
 
 		if(GodModePowerupballactive == true){
@@ -438,19 +385,25 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			}
 		}
 		if(key == KeyEvent.VK_ESCAPE){
+			Main.GamePaused = true;
+			pausediff = ticks+300;
 			Object[] options = {"Resume",
-					"Quit"};
+			"Quit"};
 			int n = JOptionPane.showOptionDialog(null,
 					"Game Paused",
-					"Question",
+					"Pause",
 					JOptionPane.YES_NO_OPTION,
-					JOptionPane.QUESTION_MESSAGE,
+					JOptionPane.INFORMATION_MESSAGE,
 					null,
 					options,
 					options[0]);
 
-			if(n == 1){
+			if(n == 0){
+				Main.GamePaused = false;
+			}else if(n == 1){
 				System.exit(1);
+			}else{
+				Main.GamePaused = false;
 			}
 		}
 	}
@@ -465,12 +418,14 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		PointerInfo a = MouseInfo.getPointerInfo();
-		Point point = new Point(a.getLocation());
-		SwingUtilities.convertPointFromScreen(point, e.getComponent());
-		mouseX = (int) point.getX();
-		mouseY = (int) point.getY();	
-		System.out.println("Mouse clicked! X: " + point.getX() + " Y: " + point.getY());
+		if(Main.devbuild == true){
+			PointerInfo a = MouseInfo.getPointerInfo();
+			Point point = new Point(a.getLocation());
+			SwingUtilities.convertPointFromScreen(point, e.getComponent());
+			mouseX = (int) point.getX();
+			mouseY = (int) point.getY();	
+			System.out.println("Mouse clicked! X: " + point.getX() + " Y: " + point.getY());
+		}
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package me.Other;
 
 import java.awt.Desktop;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -16,11 +15,10 @@ import javax.swing.JOptionPane;
 
 import me.Game.Main;
 import me.Totenfluch.TServerClient.Client;
+import me.Totenfluch.TServerClient.GetServerMessages;
 import me.security.LoginWindow;
 
 public class OtherStuff {
-	public static boolean ServerConnection = false;
-	
 	public static void openwebsite(String url){
 		try {
 			Desktop dt = Desktop.getDesktop();
@@ -111,9 +109,10 @@ public class OtherStuff {
 	}
 	
 	public static void PublishScore(int score, String username){
-		if(ServerConnection == false){
+		if(GetServerMessages.ActiveScoreConnection == false){
 			String host = "188.194.13.44";
 			int port = Integer.parseInt("9977");
+			@SuppressWarnings("unused")
 			final Client chatframe = new Client(host, port);
 		}
 			Client.processMessage("/pushscore " + username + " " + score);
