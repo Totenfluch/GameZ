@@ -99,7 +99,7 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if(arg0.getSource() == button){
-				MOTD.setText("Welcome to the Epic Login!");
+				MOTD.setText("Welcome to the Epic Login!\n");
 				OtherStuff.GetMOTD();
 			}
 		}

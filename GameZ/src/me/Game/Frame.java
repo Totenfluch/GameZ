@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import me.Other.OtherStuff;
+import me.Sound.Sound;
 import me.security.Login;
 
 public class Frame extends JFrame implements KeyListener, MouseListener, MouseMotionListener{
@@ -170,8 +171,8 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 						|| ((Destroyer2[c][0] - mousemoveX < 5 && Destroyer2[c][0] - mousemoveX > -5) && (Destroyer2[c][1] - mousemoveY < 5 && Destroyer2[c][1] - mousemoveY > -5 ))){
 					lost = true;
 					Repaint();
+					Sound.stopSound();
 					double diff = Score/ticks-300;
-
 					Object[] options = {"Retry",
 							"Quit", "Submit Score & Retry", "Submit Score & Quit"};
 					int n = JOptionPane.showOptionDialog(null,
@@ -256,6 +257,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		tickdiff = 0;
 		GodModePowerupballactive = false;
 		GodModePowerup = false;
+		Sound.playSound("Sound1.wav");
 		for(int i = 0; i < 50; i++){
 			for(int b = 0; b < 2; b++){
 				Destroyer[i][b] = OtherStuff.randInt(100, 600);

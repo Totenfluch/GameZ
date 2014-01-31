@@ -10,13 +10,14 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 
 import me.Other.OtherStuff;
+import me.Sound.Sound;
 import me.Totenfluch.TServerClient.Client;
 import me.security.LoginWindow;
 
 public class Main 
 {
 	public static boolean devbuild = false;
-	public static double Version = 4.2;
+	public static double Version = 4.3;
 	private static LoginWindow loginframe;
 	private static Timer timer = null;
 	private static Timer logintimer = null;
@@ -59,12 +60,14 @@ public class Main
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
+				if(Client.IsConnectedToServer == true){
 					try {
 						Client.socket.close();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				}
+			}
 		});
 	}
 	
@@ -79,6 +82,7 @@ public class Main
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.initialize();
+		Sound.playSound("Sound1.wav");
 	    timer = new Timer (10, new ActionListener(){
 	        public void actionPerformed(ActionEvent e) {
 	        	if(GamePaused == false){
