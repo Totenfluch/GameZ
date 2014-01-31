@@ -83,7 +83,8 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 		Password.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Color.BLACK));
 		Password.setFont(new Font("Serif", Font.BOLD, 25));
 		background.add(Password);
-
+		
+		
 		button = new JButton();
 		Image img = ResourceLoader.ImageLoad("/reload.jpg");
 		button.setIcon(new ImageIcon(img));

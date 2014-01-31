@@ -17,7 +17,7 @@ import me.security.LoginWindow;
 public class Main 
 {
 	public static boolean devbuild = false;
-	public static double Version = 4.5;
+	public static double Version = 4.6;
 	private static LoginWindow loginframe;
 	private static Timer timer = null;
 	private static Timer logintimer = null;
@@ -62,6 +62,7 @@ public class Main
 			public void run() {
 				if(Client.IsConnectedToServer == true){
 					try {
+						Client.processMessage("/leave");
 						Client.socket.close();
 					} catch (IOException e) {
 						e.printStackTrace();
