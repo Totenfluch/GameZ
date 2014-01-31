@@ -257,7 +257,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		tickdiff = 0;
 		GodModePowerupballactive = false;
 		GodModePowerup = false;
-		Sound.playSound("Sound1.wav");
+		Sound.playSound("Sound2.wav");
 		for(int i = 0; i < 50; i++){
 			for(int b = 0; b < 2; b++){
 				Destroyer[i][b] = OtherStuff.randInt(100, 600);

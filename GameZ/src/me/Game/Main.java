@@ -82,7 +82,7 @@ public class Main
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.initialize();
-		Sound.playSound("Sound1.wav");
+		Sound.playSound("Sound2.wav");
 	    timer = new Timer (10, new ActionListener(){
 	        public void actionPerformed(ActionEvent e) {
 	        	if(GamePaused == false){
