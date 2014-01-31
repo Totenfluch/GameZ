@@ -165,10 +165,11 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			GodModePowerupbally = GodModePowerupbally - OtherStuff.randInt(1, 5);
 		}
 
-		if(GodMode-ticks < 0 && GodModePowerup == false){
-			for(int c = 0; c < DestroyersOnline; c++){
-				if(((Destroyer[c][0] - mousemoveX < 5 && Destroyer[c][0] - mousemoveX > -5) && (Destroyer[c][1] - mousemoveY < 5 && Destroyer[c][1] - mousemoveY > -5))
-						|| ((Destroyer2[c][0] - mousemoveX < 5 && Destroyer2[c][0] - mousemoveX > -5) && (Destroyer2[c][1] - mousemoveY < 5 && Destroyer2[c][1] - mousemoveY > -5 ))){
+
+		for(int c = 0; c < DestroyersOnline; c++){
+			if(((Destroyer[c][0] - mousemoveX < 5 && Destroyer[c][0] - mousemoveX > -5) && (Destroyer[c][1] - mousemoveY < 5 && Destroyer[c][1] - mousemoveY > -5))
+					|| ((Destroyer2[c][0] - mousemoveX < 5 && Destroyer2[c][0] - mousemoveX > -5) && (Destroyer2[c][1] - mousemoveY < 5 && Destroyer2[c][1] - mousemoveY > -5 ))){
+				if(GodMode-ticks < 0 && GodModePowerup == false){
 					lost = true;
 					Repaint();
 					Sound.stopSound();
@@ -198,12 +199,17 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 					}else{
 						RestartGame();
 					}
-				}else if(((GodModePowerupballx - mousemoveX < 5 && GodModePowerupballx - mousemoveX > -5) && (GodModePowerupbally - mousemoveY < 5 && GodModePowerupbally - mousemoveY > -5))  && GodModePowerupballactive == true){
-					GodModePowerupballactive = false;
-					GodModePowerup = true;
-					tickdiff = ticks+300;
+				}else{
+					Destroyer2[c][0] = 1;
+					Destroyer[c][0] = 1;
 				}
+
+			}else if(((GodModePowerupballx - mousemoveX < 5 && GodModePowerupballx - mousemoveX > -5) && (GodModePowerupbally - mousemoveY < 5 && GodModePowerupbally - mousemoveY > -5))  && GodModePowerupballactive == true){
+				GodModePowerupballactive = false;
+				GodModePowerup = true;
+				tickdiff = ticks+300;
 			}
+
 		}
 
 

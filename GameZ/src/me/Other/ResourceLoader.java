@@ -5,8 +5,12 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+
 
 final public class ResourceLoader {
 
@@ -37,6 +41,21 @@ final public class ResourceLoader {
 		}
 
 		return image;
-
 	}
+	
+	public static AudioInputStream LoadSound(String path){
+		AudioInputStream x = null;
+		try {
+			x = AudioSystem.getAudioInputStream(
+					ResourceLoader.class.getResource("/" + path));
+		} catch (UnsupportedAudioFileException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return x;
+	
+	}
+	
 }

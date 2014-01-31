@@ -17,7 +17,7 @@ import me.security.LoginWindow;
 public class Main 
 {
 	public static boolean devbuild = false;
-	public static double Version = 4.3;
+	public static double Version = 4.4;
 	private static LoginWindow loginframe;
 	private static Timer timer = null;
 	private static Timer logintimer = null;

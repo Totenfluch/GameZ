@@ -4,7 +4,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
-import me.Game.Main;
+import me.Other.ResourceLoader;
 
 public class Sound {
 	private static Clip clip;
@@ -15,8 +15,7 @@ public class Sound {
 		    public void run() {
 		      try {
 		        clip = AudioSystem.getClip();
-		        AudioInputStream inputStream = AudioSystem.getAudioInputStream(
-		          Main.class.getResourceAsStream("/" + url));
+		        AudioInputStream inputStream = ResourceLoader.LoadSound(url);
 		        clip.open(inputStream);
 		        clip.loop(-1);
 		        clip.start(); 
