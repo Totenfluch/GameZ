@@ -133,8 +133,20 @@ public class OtherStuff {
 					if(Double.valueOf(inputLine) == Main.Version){
 						Main.Valid = true;
 					}else{
-						JOptionPane.showMessageDialog(null, "You don't have the newest Version.\nYou can only submit scores if you are using the latest version.\nDownload here:\nhttps://dl.dropboxusercontent.com/u/88851086/GameZ.jar");
-						openwebsite("https://dl.dropboxusercontent.com/u/88851086/GameZ.jar");
+						Object[] options = {"Update",
+								"Quit"};
+						int n = JOptionPane.showOptionDialog(null,
+								"You don't have the newest Version.\nYour Version: "+Main.Version + " Newest: " + Double.valueOf(inputLine) ,
+								"Update Found!",
+								JOptionPane.YES_NO_OPTION,
+								JOptionPane.QUESTION_MESSAGE,
+								null,
+								options,
+								options[0]);
+
+						if(n == 0){
+							openwebsite("https://dl.dropboxusercontent.com/u/88851086/GameZ.jar");
+						}
 					}
 			}               
 		}catch(Exception e){
