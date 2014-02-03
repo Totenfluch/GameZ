@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import me.Game.Main;
 import me.security.DataCrypter;
+import me.security.Login;
 
 public class Client extends JFrame implements Runnable
 {
@@ -79,6 +80,9 @@ public class Client extends JFrame implements Runnable
 				if(IsConnectedToServer == true){
 					String message = DataCrypter.decrypt2(din.readUTF());
 					LatestServerReply = message;
+					if(message.equals("Authorized")){
+						Login.truelogin();
+					}
 					GetServerMessages.CheckServerMessages(message);
 					ta.append(message+"\n");
 					waitingforreply = false;

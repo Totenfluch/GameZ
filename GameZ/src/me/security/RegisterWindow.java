@@ -97,13 +97,13 @@ public class RegisterWindow extends JFrame implements MouseMotionListener, Mouse
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource() == RegisterButton){
-				if(Username.getText().contains(" ") && Username.getText().contains("-") && Username.getText().contains("~")){
+				if(Username.getText().contains(" ") || Username.getText().contains("-") || Username.getText().contains("~")){
 					JOptionPane.showMessageDialog(null, "Invalid Username");
 				}else if(!String.valueOf(Password.getPassword()).equals(String.valueOf(ConfirmPassword.getPassword()))){
 					JOptionPane.showMessageDialog(null, "Passwords don't match");
 				}else if(!Email.getText().contains("@")){
 					JOptionPane.showMessageDialog(null, "Invalid Email address");
-				}else if(!BetaKey.getText().contains("-") && BetaKey.getText().contains(" ")){
+				}else if(!BetaKey.getText().contains("-") || BetaKey.getText().contains(" ") || BetaKey.getText().length() != 41){
 					JOptionPane.showMessageDialog(null, "Inalid BetaKey");
 				}else{
 					OtherStuff.RegisterMe(Username.getText(), String.valueOf(Password.getPassword()), String.valueOf(ConfirmPassword.getPassword()), Email.getText(), BetaKey.getText());

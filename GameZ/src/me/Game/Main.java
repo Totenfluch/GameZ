@@ -18,7 +18,7 @@ import me.security.RegisterWindow;
 public class Main 
 {
 	public static boolean devbuild = false;
-	public static double Version = 5.2;
+	public static double Version = 5.3;
 	private static LoginWindow loginframe;
 	private static Timer timer = null;
 	private static Timer logintimer = null;
@@ -51,6 +51,9 @@ public class Main
 		if (imageURL != null) {
 			img2 = new ImageIcon(imageURL2);
 		}
+		
+		RegisterWindow registerframe = new RegisterWindow();
+		registerframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		loginframe = new LoginWindow();
 		loginframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -101,7 +104,7 @@ public class Main
 		frame.initialize();
 		frame.setIconImage(img2.getImage());
 		Sound.playSound("Sound2.wav");
-		CloseRegisterWindow();
+		//CloseRegisterWindow();
 	    timer = new Timer (10, new ActionListener(){
 	        public void actionPerformed(ActionEvent e) {
 	        	if(GamePaused == false){
@@ -115,12 +118,12 @@ public class Main
 	}
 	
 	public static void OpenRegisterWindow(){
-		final RegisterWindow registerframe = new RegisterWindow();
-		registerframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		registerframe.setVisible(true);
 	}
 	
 	public static void CloseRegisterWindow(){
-		registerframe.setVisible(false);
+		if(registerframe.isVisible() == true){
+			registerframe.setVisible(false);
+		}
 	}
 }

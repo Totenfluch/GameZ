@@ -4,7 +4,9 @@ package me.security;
 import javax.swing.JOptionPane;
 
 
+
 import me.Game.Main;
+import me.Totenfluch.TServerClient.Client;
 
 public class Login {
 	static String admin = "Admin";
@@ -21,11 +23,15 @@ public class Login {
 			}else{
 				// Check Password here
 				ActiveUser = Username;
-				Main.DisableLoginWindow();
-				Main.StartGame();
+				Client.processMessage("/login " + Username + " " + Password);
 			}
 		}else{
 			JOptionPane.showMessageDialog(null, "White Spaces, swear words/names, '-' '<' '>' in names not allowed. Between 6 and 12 Letters");
 		}
+	}
+	
+	public static void truelogin(){
+		Main.DisableLoginWindow();
+		Main.StartGame();
 	}
 }
