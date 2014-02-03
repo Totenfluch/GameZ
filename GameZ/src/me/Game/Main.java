@@ -18,7 +18,7 @@ import me.security.RegisterWindow;
 public class Main 
 {
 	public static boolean devbuild = false;
-	public static double Version = 5.1;
+	public static double Version = 5.2;
 	private static LoginWindow loginframe;
 	private static Timer timer = null;
 	private static Timer logintimer = null;

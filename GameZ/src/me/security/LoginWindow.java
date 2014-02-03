@@ -57,13 +57,13 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 
 		background.setLayout(null);
 
-		version = new JLabel("Epic Login V " + Main.Version);
+		version = new JLabel("Reflection V " + Main.Version);
 		version.setForeground(Color.WHITE);
 		version.setFont(new Font("Serif", Font.BOLD, 12));
 		version.setBounds(5, 555, 100, 60);
 		background.add(version);
 
-		MOTD = new JTextArea("Welcome to the Epic Login!\n");
+		MOTD = new JTextArea("Welcome to Reflection!\n");
 		MOTD.setBounds(128, 172, 541, 206);
 		MOTD.setEditable(false);
 		background.add(MOTD);
@@ -100,7 +100,7 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if(arg0.getSource() == button){
-				MOTD.setText("Welcome to the Epic Login!\n");
+				MOTD.setText("Welcome to Reflection!\n");
 				OtherStuff.GetMOTD();
 			}
 		}
