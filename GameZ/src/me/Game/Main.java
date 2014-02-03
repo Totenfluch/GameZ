@@ -2,10 +2,10 @@ package me.Game;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.Timer;
 
@@ -13,11 +13,12 @@ import me.Other.OtherStuff;
 import me.Sound.Sound;
 import me.Totenfluch.TServerClient.Client;
 import me.security.LoginWindow;
+import me.security.RegisterWindow;
 
 public class Main 
 {
 	public static boolean devbuild = false;
-	public static double Version = 4.6;
+	public static double Version = 5.1;
 	private static LoginWindow loginframe;
 	private static Timer timer = null;
 	private static Timer logintimer = null;
@@ -26,6 +27,8 @@ public class Main
 	public static String ComputerName;
 	public static boolean Valid = false;
 	public static boolean GamePaused = false;
+	private static RegisterWindow registerframe;
+	private static ImageIcon img2;
 	
 	public static void main(String[] args)
 	{	
@@ -37,11 +40,24 @@ public class Main
 		ComputerMac = OtherStuff.getMacAdress();
 		ComputerName = ComputerIP.getHostName();
 		
+		java.net.URL imageURL = Main.class.getResource("/icon_login.png");
+		ImageIcon img = null;
+		if (imageURL != null) {
+			img = new ImageIcon(imageURL);
+		}
+		
+		java.net.URL imageURL2 = Main.class.getResource("/demgame.png");
+		img2 = null;
+		if (imageURL != null) {
+			img2 = new ImageIcon(imageURL2);
+		}
+		
 		loginframe = new LoginWindow();
 		loginframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		loginframe.setVisible(true);
 		loginframe.initialize();
 		loginframe.Repaint();
+		loginframe.setIconImage(img.getImage());
 		logintimer = new Timer (10, new ActionListener(){
 	        public void actionPerformed(ActionEvent e) {
 	            loginframe.Repaint();
@@ -58,18 +74,18 @@ public class Main
 		
 		OtherStuff.MakeValid();
 		
-		Runtime.getRuntime().addShutdownHook(new Thread() {
+		/*Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run() {
 				if(Client.IsConnectedToServer == true){
 					try {
-						Client.processMessage("/leave");
-						Client.socket.close();
-					} catch (IOException e) {
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 			}
-		});
+		});*/
+		
+		//System.out.println("Main end?");
 	}
 	
 	public static void DisableLoginWindow(){
@@ -78,12 +94,14 @@ public class Main
 	
 	public static void StartGame(){
 		final Frame frame = new Frame();
-		frame.setSize(1020, 600);
+		frame.setSize(1020, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.initialize();
+		frame.setIconImage(img2.getImage());
 		Sound.playSound("Sound2.wav");
+		CloseRegisterWindow();
 	    timer = new Timer (10, new ActionListener(){
 	        public void actionPerformed(ActionEvent e) {
 	        	if(GamePaused == false){
@@ -94,5 +112,15 @@ public class Main
 	    });
 	    timer.start();
 	    logintimer.stop();
+	}
+	
+	public static void OpenRegisterWindow(){
+		final RegisterWindow registerframe = new RegisterWindow();
+		registerframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		registerframe.setVisible(true);
+	}
+	
+	public static void CloseRegisterWindow(){
+		registerframe.setVisible(false);
 	}
 }

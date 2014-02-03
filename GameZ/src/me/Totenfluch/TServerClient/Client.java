@@ -8,6 +8,7 @@ import java.net.*;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import me.Game.Main;
 import me.security.DataCrypter;
 
 public class Client extends JFrame implements Runnable
@@ -63,7 +64,7 @@ public class Client extends JFrame implements Runnable
 	public static void processMessage( String message ) {
 		if(IsConnectedToServer == true){
 			try {
-				format = DataCrypter.encrypt2((ComputerName.getText() +" " + message));
+				format = DataCrypter.encrypt2((Main.ComputerName +" " + message));
 				dout.writeUTF( format );
 				tf.setText("");
 				waitingforreply = true;
@@ -75,11 +76,13 @@ public class Client extends JFrame implements Runnable
 		try {
 
 			while (true) {
-				String message = DataCrypter.decrypt2(din.readUTF());
-				LatestServerReply = message;
-				GetServerMessages.CheckServerMessages(message);
-				ta.append(message+"\n");
-				waitingforreply = false;
+				if(IsConnectedToServer == true){
+					String message = DataCrypter.decrypt2(din.readUTF());
+					LatestServerReply = message;
+					GetServerMessages.CheckServerMessages(message);
+					ta.append(message+"\n");
+					waitingforreply = false;
+				}
 			}
 		} catch( Exception ie ) { ie.printStackTrace(); System.out.println( ie); IsConnectedToServer = false; }
 	}

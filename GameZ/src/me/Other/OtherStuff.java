@@ -19,6 +19,7 @@ import me.Totenfluch.TServerClient.GetServerMessages;
 import me.security.LoginWindow;
 
 public class OtherStuff {
+	
 	public static void openwebsite(String url){
 		try {
 			Desktop dt = Desktop.getDesktop();
@@ -152,6 +153,10 @@ public class OtherStuff {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+	}
+	
+	public static void RegisterMe(String Username, String Password, String ConfirmPassword, String Email, String BetaKey){
+		Client.processMessage("/register" + " " + Username + " " + Password + " " + Email + " " + BetaKey);
 	}
 	
 

@@ -216,6 +216,10 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 			char[] sPasswordfield = Password.getPassword();
 			Login.LogMeIn(Username.getText(), String.valueOf(sPasswordfield));
 		}
+		
+		if(register_button_pressed == true){
+			Main.OpenRegisterWindow();
+		}
 
 		login_button_pressed = false;
 		register_button_pressed = false;

@@ -28,7 +28,7 @@ public class RainParticle
 	public void Update(int Height)
 	{
 		PosY += Speed;
-		if(PosY > Height)
+		if(PosY > 590)
 			PosY = 0;
 		
 		AdjustmentX = (float)Math.sin(PosY/(100+randomAdjustment))*30;

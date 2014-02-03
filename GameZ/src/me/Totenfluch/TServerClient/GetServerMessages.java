@@ -44,7 +44,7 @@ public class GetServerMessages{
 		else if(message.startsWith("broadcast")){
 			String msg = message.replace("broadcast", "");
 			msg = message.replace("*", "");
-			JOptionPane.showMessageDialog(null, msg);;
+			JOptionPane.showMessageDialog(null, msg);
 		}
 
 	}
