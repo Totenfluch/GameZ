@@ -18,7 +18,7 @@ import me.security.RegisterWindow;
 public class Main 
 {
 	public static boolean devbuild = false;
-	public static double Version = 5.3;
+	public static double Version = 5.4;
 	private static LoginWindow loginframe;
 	private static Timer timer = null;
 	private static Timer logintimer = null;
@@ -53,7 +53,7 @@ public class Main
 		}
 		
 		registerframe = new RegisterWindow();
-		registerframe.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		//registerframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		loginframe = new LoginWindow();
 		loginframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
