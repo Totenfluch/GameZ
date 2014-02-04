@@ -27,8 +27,8 @@ public class Main
 	public static String ComputerName;
 	public static boolean Valid = false;
 	public static boolean GamePaused = false;
-	private static RegisterWindow registerframe;
 	private static ImageIcon img2;
+	private static RegisterWindow registerframe;
 	
 	public static void main(String[] args)
 	{	
@@ -52,8 +52,8 @@ public class Main
 			img2 = new ImageIcon(imageURL2);
 		}
 		
-		RegisterWindow registerframe = new RegisterWindow();
-		registerframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		registerframe = new RegisterWindow();
+		registerframe.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		
 		loginframe = new LoginWindow();
 		loginframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -104,7 +104,7 @@ public class Main
 		frame.initialize();
 		frame.setIconImage(img2.getImage());
 		Sound.playSound("Sound2.wav");
-		//CloseRegisterWindow();
+		CloseRegisterWindow();
 	    timer = new Timer (10, new ActionListener(){
 	        public void actionPerformed(ActionEvent e) {
 	        	if(GamePaused == false){
