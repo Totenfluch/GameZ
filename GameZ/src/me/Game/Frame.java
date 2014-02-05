@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import me.Other.OtherStuff;
+import me.Other.RememberMeClass;
 import me.Other.ResourceLoader;
 import me.Sound.Sound;
 import me.security.Login;
@@ -69,7 +70,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 	public Frame()
 	{
-		super("The Epic Game");
+		setTitle("The Epic Game");
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setLayout(null);
@@ -253,7 +254,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 						Sound.stopSound();
 						double diff = Score/(ticks-300);
 						Object[] options = {"Retry",
-								"Quit", "Submit Score & Retry", "Submit Score & Quit"};
+								"Quit", "Submit Score & Retry", "Submit Score & Quit", "Submit, Logout & Quit"};
 						int n = JOptionPane.showOptionDialog(null,
 								"You Faggot Lost!\nYou scored: " + Score + " Points\nIn " + ticks + " ticks.\n" + "Average Difficulty: " + diff ,
 								"Question",
@@ -273,6 +274,9 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 						}else if(n == 3){
 							OtherStuff.PublishScore(Score, Login.ActiveUser);
 							JOptionPane.showMessageDialog(null, "Score published! bye");
+							System.exit(0);
+						}else if(n == 4){
+							RememberMeClass.RememberMeLogout();
 							System.exit(0);
 						}else{
 							RestartGame();
@@ -520,7 +524,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 				Main.GamePaused = true;
 				pausediff = ticks+300;
 				Object[] options = {"Resume",
-						"Quit"};
+						"Quit", "Logout and Quit"};
 				int n = JOptionPane.showOptionDialog(null,
 						"Game Paused",
 						"Pause",
@@ -534,6 +538,9 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 					Main.GamePaused = false;
 				}else if(n == 1){
 					System.exit(1);
+				}else if(n ==2){
+					RememberMeClass.RememberMeLogout();
+					System.exit(0);
 				}else{
 					Main.GamePaused = false;
 				}

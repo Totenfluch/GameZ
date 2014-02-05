@@ -21,6 +21,7 @@ import java.awt.image.BufferStrategy;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
@@ -43,6 +44,7 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 	private JLabel version;
 	public static JTextArea MOTD;
 	private JButton button;
+	public static JCheckBox remembermecheckbox;
 
 	public LoginWindow(){
 		setSize(806, 629);
@@ -84,6 +86,12 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 		Password.setFont(new Font("Serif", Font.BOLD, 25));
 		background.add(Password);
 		
+		remembermecheckbox = new JCheckBox("Remember me", ResourceLoader.Iconload("/tick_box.png"));
+		remembermecheckbox.setBackground(Color.WHITE);
+		remembermecheckbox.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 0, Color.WHITE));
+		remembermecheckbox.setSelectedIcon(ResourceLoader.Iconload("/tick_boxticked.png"));
+		remembermecheckbox.setBounds(312, 535, 150, 16);
+		background.add(remembermecheckbox);		
 		
 		button = new JButton();
 		Image img = ResourceLoader.ImageLoad("/reload.jpg");

@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.Timer;
 
 import me.Other.OtherStuff;
+import me.Other.RememberMeClass;
 import me.Sound.Sound;
 import me.Totenfluch.TServerClient.Client;
 import me.security.LoginWindow;
@@ -77,18 +78,12 @@ public class Main
 		
 		OtherStuff.MakeValid();
 		
-		/*Runtime.getRuntime().addShutdownHook(new Thread() {
-			public void run() {
-				if(Client.IsConnectedToServer == true){
-					try {
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		});*/
-		
-		//System.out.println("Main end?");
+		try {
+			Client.processMessage(RememberMeClass.RememberMeLogin());
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
 	}
 	
 	public static void DisableLoginWindow(){
