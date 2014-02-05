@@ -97,7 +97,7 @@ public class RegisterWindow extends JFrame implements MouseMotionListener, Mouse
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(e.getSource() == RegisterButton){
-				if(Username.getText().contains(" ") || Username.getText().contains("-") || Username.getText().contains("~")){
+				if(Username.getText().contains(" ") || Username.getText().contains("-") || Username.getText().contains("~") || Username.getText().length() <= 4){
 					JOptionPane.showMessageDialog(null, "Invalid Username");
 				}else if(!String.valueOf(Password.getPassword()).equals(String.valueOf(ConfirmPassword.getPassword()))){
 					JOptionPane.showMessageDialog(null, "Passwords don't match");
