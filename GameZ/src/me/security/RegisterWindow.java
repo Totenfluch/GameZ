@@ -101,10 +101,12 @@ public class RegisterWindow extends JFrame implements MouseMotionListener, Mouse
 					JOptionPane.showMessageDialog(null, "Invalid Username");
 				}else if(!String.valueOf(Password.getPassword()).equals(String.valueOf(ConfirmPassword.getPassword()))){
 					JOptionPane.showMessageDialog(null, "Passwords don't match");
-				}else if(!Email.getText().contains("@")){
+				}else if(String.valueOf(Password.getPassword()).length() <= 5 ){
+					JOptionPane.showMessageDialog(null, "Password too short");
+				}else if(!Email.getText().contains("@") || !Email.getText().contains(".")){
 					JOptionPane.showMessageDialog(null, "Invalid Email address");
 				}else if(!BetaKey.getText().contains("-") || BetaKey.getText().contains(" ") || BetaKey.getText().length() != 41){
-					JOptionPane.showMessageDialog(null, "Inalid BetaKey");
+					JOptionPane.showMessageDialog(null, "Invalid BetaKey");
 				}else{
 					OtherStuff.RegisterMe(Username.getText(), String.valueOf(Password.getPassword()), String.valueOf(ConfirmPassword.getPassword()), Email.getText(), BetaKey.getText());
 				}
