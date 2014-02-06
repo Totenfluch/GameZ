@@ -26,6 +26,7 @@ public class Login {
 				Client.processMessage("/login " + Username + " " + Password + " " + Main.ComputerIP + " " + Main.ComputerMac);
 				if(LoginWindow.remembermecheckbox.isSelected() == true){
 					try {
+						RememberMeClass.RememberMeLogout();
 						RememberMeClass.RememberMeSave(Username, Password);
 					} catch (Exception e1) {
 						e1.printStackTrace();
