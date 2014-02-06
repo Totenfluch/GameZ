@@ -35,14 +35,15 @@ import me.Totenfluch.TServerClient.GetServerMessages;
 
 public class LoginWindow extends JFrame implements MouseListener, KeyListener, MouseMotionListener{
 	private static final long serialVersionUID = 1L;
-	private JTextField Username;
-	private JPasswordField Password;
+	public static JTextField Username;
+	public static JPasswordField Password;
 	private BufferStrategy strat;
 	private JLabel background;
 	private int mouseX, mouseY;
 	private boolean login_button_pressed=false, register_button_pressed=false;
 	private JLabel version;
 	public static JTextArea MOTD;
+	public static JTextArea trueMOTD;
 	private JButton button;
 	public static JCheckBox remembermecheckbox;
 
@@ -66,9 +67,17 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 		background.add(version);
 
 		MOTD = new JTextArea("Welcome to Reflection!\n");
-		MOTD.setBounds(128, 172, 541, 206);
+		MOTD.setBounds(128, 172, 270, 206);
 		MOTD.setEditable(false);
 		background.add(MOTD);
+
+		trueMOTD = new JTextArea(
+				"------------------------------------------------\n"+
+						"                        News					 \n"+
+				"------------------------------------------------\n");
+		trueMOTD.setBounds(398, 172, 271, 206);
+		trueMOTD.setEditable(false);
+		background.add(trueMOTD);
 
 		Username = new JTextField("", 20);
 		Username.setForeground(Color.WHITE);
@@ -85,34 +94,39 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 		Password.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Color.BLACK));
 		Password.setFont(new Font("Serif", Font.BOLD, 25));
 		background.add(Password);
-		
+
 		remembermecheckbox = new JCheckBox("Remember me", ResourceLoader.Iconload("/tick_box.png"));
 		remembermecheckbox.setBackground(Color.WHITE);
 		remembermecheckbox.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 0, Color.WHITE));
 		remembermecheckbox.setSelectedIcon(ResourceLoader.Iconload("/tick_boxticked.png"));
 		remembermecheckbox.setBounds(312, 535, 150, 16);
 		background.add(remembermecheckbox);		
-		
+
 		button = new JButton();
 		Image img = ResourceLoader.ImageLoad("/reload.jpg");
 		button.setIcon(new ImageIcon(img));
 		button.setBounds(100, 175, 20, 20);
 		background.add(button);
-		
+
 		thehandler handler = new thehandler();
 		button.addActionListener(handler);
 	}
-	
+
 	private class thehandler implements ActionListener{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if(arg0.getSource() == button){
 				MOTD.setText("Welcome to Reflection!\n");
+				trueMOTD.setText(
+						"------------------------------------------------\n"+
+								"                        News					 \n"+
+						"------------------------------------------------\n");
 				OtherStuff.GetMOTD();
+				OtherStuff.GettrueMOTD();
 			}
 		}
-		
+
 	}
 
 	public void initialize()
@@ -157,7 +171,7 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 		}else{
 			g.drawImage(ResourceLoader.ImageLoad("/register_01.jpg"), 125, 459, null);
 		}
-		
+
 		if(!GetServerMessages.ActiveScoreConnection == false){
 			g.setColor(Color.GREEN);
 			g.drawString("Connected to ScoreServer!", 635, 620);
@@ -166,15 +180,6 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 			g.drawString("Not Connected to ScoreServer!", 635, 620);
 		}
 	}
-
-	/*private class thehandler implements ActionListener{
-
-		@Override
-		public void actionPerformed(ActionEvent event) {
-
-		}
-
-	}*/
 
 	public void mouseMoved(MouseEvent event)
 	{
@@ -196,13 +201,11 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -224,7 +227,7 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 			char[] sPasswordfield = Password.getPassword();
 			Login.LogMeIn(Username.getText(), String.valueOf(sPasswordfield));
 		}
-		
+
 		if(register_button_pressed == true){
 			Main.OpenRegisterWindow();
 		}

@@ -19,7 +19,7 @@ import me.security.RegisterWindow;
 public class Main 
 {
 	public static boolean devbuild = false;
-	public static double Version = 5.5;
+	public static double Version = 5.8;
 	private static LoginWindow loginframe;
 	private static Timer timer = null;
 	private static Timer logintimer = null;
@@ -69,6 +69,7 @@ public class Main
 	    });
 		logintimer.start();
 		OtherStuff.GetMOTD();
+		OtherStuff.GettrueMOTD();
 		
 		
 		String host = "188.194.13.44";
@@ -79,7 +80,12 @@ public class Main
 		OtherStuff.MakeValid();
 		
 		try {
-			Client.processMessage(RememberMeClass.RememberMeLogin());
+			String[] temp = RememberMeClass.RememberMeLogin().split(" ");
+			if(temp[0] != "nop"){
+				LoginWindow.Username.setText(temp[1]);
+				LoginWindow.Password.setText(temp[2]);
+				LoginWindow.remembermecheckbox.setSelected(true);
+			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}

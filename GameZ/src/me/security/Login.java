@@ -30,6 +30,8 @@ public class Login {
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
+				}else if(LoginWindow.remembermecheckbox.isSelected() == false){
+					RememberMeClass.RememberMeLogout();
 				}
 			}
 		}else{

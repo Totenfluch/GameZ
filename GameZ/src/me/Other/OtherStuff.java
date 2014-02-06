@@ -158,6 +158,21 @@ public class OtherStuff {
 	public static void RegisterMe(String Username, String Password, String ConfirmPassword, String Email, String BetaKey){
 		Client.processMessage("/register" + " " + Username + " " + Password + " " + Email + " " + BetaKey);
 	}
+
+	public static void GettrueMOTD() {
+		try{
+			URL oracle = new URL("https://dl.dropboxusercontent.com/u/88851086/ReflectionNews.txt");
+			BufferedReader in = new BufferedReader(
+					new InputStreamReader(oracle.openStream()));
+
+			String inputLine;
+			while ((inputLine = in.readLine()) != null){
+					LoginWindow.trueMOTD.append(inputLine + "\n");
+			}               
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 	
 
 }
