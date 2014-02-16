@@ -3,9 +3,6 @@ package me.security;
 
 import javax.swing.JOptionPane;
 
-
-
-
 import me.Game.Main;
 import me.Other.RememberMeClass;
 import me.Totenfluch.TServerClient.Client;
@@ -20,10 +17,14 @@ public class Login {
 				Main.DisableLoginWindow();
 				Main.StartGame();
 				ActiveUser = Username;
+			}else if(Main.OnlineMode == false && Client.disconnected == true){
+				Main.DisableLoginWindow();
+				Main.StartGame();
+				ActiveUser = Username;
 			}else{
 				// Check Password here
 				ActiveUser = Username;
-				Client.processMessage("/login " + Username + " " + Password + " " + Main.ComputerIP + " " + Main.ComputerMac);
+				Client.processMessage("/login " + Username + " " + Password + " " + Main.ComputerIP + " " + Main.ComputerMac + " " + Main.Valid);
 				if(LoginWindow.remembermecheckbox.isSelected() == true){
 					try {
 						RememberMeClass.RememberMeLogout();

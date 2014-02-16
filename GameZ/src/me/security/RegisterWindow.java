@@ -29,6 +29,8 @@ public class RegisterWindow extends JFrame implements MouseMotionListener, Mouse
 	private JTextField BetaKey;
 	private JLabel background;
 	private JButton RegisterButton;
+	public static String lastregisteredusername = "";
+	public static String lastregisteredpassword = "";
 	
 	public RegisterWindow(){
 		setTitle("Register Beta account");
@@ -83,7 +85,7 @@ public class RegisterWindow extends JFrame implements MouseMotionListener, Mouse
 		BetaKey.setBorder(BorderFactory.createMatteBorder(0, 0, 5, 0, Color.BLACK));
 		background.add(BetaKey);
 		
-		RegisterButton = new JButton(ResourceLoader.Iconload("/register_02.jpg"));
+		RegisterButton = new JButton(ResourceLoader.Iconload("/register_01.jpg"));
 		RegisterButton.setBounds(114, 450, 170, 97);
 		background.add(RegisterButton);
 		
@@ -109,6 +111,8 @@ public class RegisterWindow extends JFrame implements MouseMotionListener, Mouse
 					JOptionPane.showMessageDialog(null, "Invalid BetaKey");
 				}else{
 					OtherStuff.RegisterMe(Username.getText(), String.valueOf(Password.getPassword()), String.valueOf(ConfirmPassword.getPassword()), Email.getText(), BetaKey.getText());
+					lastregisteredpassword = String.valueOf(Password.getPassword());
+					lastregisteredusername = Username.getText();
 				}
 			}
 			

@@ -15,11 +15,10 @@ import javax.swing.JOptionPane;
 
 import me.Game.Main;
 import me.Totenfluch.TServerClient.Client;
-import me.Totenfluch.TServerClient.GetServerMessages;
 import me.security.LoginWindow;
 
 public class OtherStuff {
-	
+	public static String[] scores = new String[103];
 	public static void openwebsite(String url){
 		try {
 			Desktop dt = Desktop.getDesktop();
@@ -66,7 +65,7 @@ public class OtherStuff {
 		int intime = Integer.parseInt(time);
 		return intime;
 	}
-	
+
 	public static String getMacAdress(){
 		String ComputerMac = null;
 		try{
@@ -84,23 +83,33 @@ public class OtherStuff {
 		}
 		return ComputerMac;
 	}
-	
+
 
 	public static void GetMOTD(){
+		for(int i = 0; i<100 ; i++ ){
+			scores[i] = "--- Empty ---";
+		}
 		try{
 			URL oracle = new URL("https://dl.dropboxusercontent.com/u/88851086/MOTD.txt");
 			BufferedReader in = new BufferedReader(
 					new InputStreamReader(oracle.openStream()));
 
 			String inputLine;
+			int p = 0;
 			while ((inputLine = in.readLine()) != null){
-					LoginWindow.MOTD.append(inputLine + "\n");
-			}               
+				LoginWindow.MOTD.append(inputLine + "\n");
+
+				if(p < 100 && p > 1){
+					scores[p-2] = inputLine;
+				}
+				p++;
+			}
+			p = 0;
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
-	
+
 
 	public static int randInt(int min, int max) {
 		Random rand = new Random();
@@ -108,21 +117,17 @@ public class OtherStuff {
 
 		return randomNum;
 	}
-	
+
 	public static void PublishScore(int score, String username){
-		if(GetServerMessages.ActiveScoreConnection == false){
+		if(Client.IsConnectedToServer == false){
 			String host = "188.194.13.44";
 			int port = Integer.parseInt("9977");
 			@SuppressWarnings("unused")
 			final Client chatframe = new Client(host, port);
 		}
-			Client.processMessage("/pushscore " + username + " " + score);
-	}
-	
-	public static void pubscpre(int score, String username){
 		Client.processMessage("/pushscore " + username + " " + score);
 	}
-	
+
 	public static void MakeValid(){
 		try{
 			URL oracle = new URL("https://dl.dropboxusercontent.com/u/88851086/GameZVersion.txt");
@@ -131,30 +136,30 @@ public class OtherStuff {
 
 			String inputLine;
 			while ((inputLine = in.readLine()) != null){
-					if(Double.valueOf(inputLine) == Main.Version){
-						Main.Valid = true;
-					}else{
-						Object[] options = {"Update",
-								"Quit"};
-						int n = JOptionPane.showOptionDialog(null,
-								"You don't have the newest Version.\nYour Version: "+Main.Version + " Newest: " + Double.valueOf(inputLine) ,
-								"Update Found!",
-								JOptionPane.YES_NO_OPTION,
-								JOptionPane.QUESTION_MESSAGE,
-								null,
-								options,
-								options[0]);
+				if(Double.valueOf(inputLine) <= Main.Version){
+					Main.Valid = true;
+				}else{
+					Object[] options = {"Update",
+					"Quit"};
+					int n = JOptionPane.showOptionDialog(null,
+							"You don't have the newest Version.\nYour Version: "+Main.Version + " Newest: " + Double.valueOf(inputLine) ,
+							"Update Found!",
+							JOptionPane.YES_NO_OPTION,
+							JOptionPane.QUESTION_MESSAGE,
+							null,
+							options,
+							options[0]);
 
-						if(n == 0){
-							openwebsite("https://dl.dropboxusercontent.com/u/88851086/GameZ.jar");
-						}
+					if(n == 0){
+						openwebsite("https://dl.dropboxusercontent.com/u/88851086/Reflection.jar");
 					}
+				}
 			}               
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void RegisterMe(String Username, String Password, String ConfirmPassword, String Email, String BetaKey){
 		Client.processMessage("/register" + " " + Username + " " + Password + " " + Email + " " + BetaKey);
 	}
@@ -167,12 +172,12 @@ public class OtherStuff {
 
 			String inputLine;
 			while ((inputLine = in.readLine()) != null){
-					LoginWindow.trueMOTD.append(inputLine + "\n");
+				LoginWindow.trueMOTD.append(inputLine + "\n");
 			}               
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
-	
+
 
 }

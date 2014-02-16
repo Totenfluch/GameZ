@@ -6,9 +6,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.PointerInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -27,11 +24,10 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 import me.Game.Main;
 import me.Other.*;
-import me.Totenfluch.TServerClient.GetServerMessages;
+import me.Totenfluch.TServerClient.Client;
 
 public class LoginWindow extends JFrame implements MouseListener, KeyListener, MouseMotionListener{
 	private static final long serialVersionUID = 1L;
@@ -46,6 +42,7 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 	public static JTextArea trueMOTD;
 	private JButton button;
 	public static JCheckBox remembermecheckbox;
+	public static JButton StartOfflineMode;
 
 	public LoginWindow(){
 		setSize(806, 629);
@@ -60,10 +57,10 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 
 		background.setLayout(null);
 
-		version = new JLabel("Reflection V " + Main.Version);
+		version = new JLabel("Reflection " + Main.DevState + " @ " + Main.Version);
 		version.setForeground(Color.WHITE);
 		version.setFont(new Font("Serif", Font.BOLD, 12));
-		version.setBounds(5, 555, 100, 60);
+		version.setBounds(5, 555, 200, 60);
 		background.add(version);
 
 		MOTD = new JTextArea("Welcome to Reflection!\n");
@@ -100,7 +97,13 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 		remembermecheckbox.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 0, Color.WHITE));
 		remembermecheckbox.setSelectedIcon(ResourceLoader.Iconload("/tick_boxticked.png"));
 		remembermecheckbox.setBounds(312, 535, 150, 16);
-		background.add(remembermecheckbox);		
+		background.add(remembermecheckbox);
+
+		StartOfflineMode = new JButton("Offline Mode");
+		StartOfflineMode.setBounds(335, 580, 120, 20);
+		StartOfflineMode.setEnabled(false);
+		StartOfflineMode.setVisible(false);
+		background.add(StartOfflineMode);
 
 		button = new JButton();
 		Image img = ResourceLoader.ImageLoad("/reload.jpg");
@@ -124,6 +127,10 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 						"------------------------------------------------\n");
 				OtherStuff.GetMOTD();
 				OtherStuff.GettrueMOTD();
+			}
+			
+			if(arg0.getSource() == StartOfflineMode){
+				Login.LogMeIn("User", " ");
 			}
 		}
 
@@ -172,12 +179,15 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 			g.drawImage(ResourceLoader.ImageLoad("/register_01.jpg"), 125, 459, null);
 		}
 
-		if(!GetServerMessages.ActiveScoreConnection == false){
+		if(!Client.IsConnectedToServer == false){
 			g.setColor(Color.GREEN);
 			g.drawString("Connected to ScoreServer!", 635, 620);
+		}else if(Client.disconnected == false){
+			g.setColor(Color.RED);
+			g.drawString("(" + Main.SecoundsToTimeout + ") Not Connected to ScoreServer!", 610, 620);
 		}else{
 			g.setColor(Color.RED);
-			g.drawString("Not Connected to ScoreServer!", 635, 620);
+			g.drawString("Disconnected.", 710, 620);
 		}
 	}
 
@@ -190,12 +200,6 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		PointerInfo a = MouseInfo.getPointerInfo();
-		Point point = new Point(a.getLocation());
-		SwingUtilities.convertPointFromScreen(point, e.getComponent());
-		double mouseX = (int) point.getX();
-		double mouseY = (int) point.getY();	
-		System.out.println("(ContainerPos) Mouse clicked! X: " + mouseX + " Y: " + mouseY);
 		Repaint();
 	}
 

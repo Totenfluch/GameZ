@@ -43,6 +43,18 @@ final public class ResourceLoader {
 		return image;
 	}
 	
+
+	public static BufferedImage loadBufferedImage(String path){
+		BufferedImage image = null;
+		try {
+			image = ImageIO.read(ResourceLoader.class.getResource(path));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return image;
+	}
+	
 	public static AudioInputStream LoadSound(String path){
 		AudioInputStream x = null;
 		try {

@@ -23,6 +23,7 @@ import me.Other.OtherStuff;
 import me.Other.RememberMeClass;
 import me.Other.ResourceLoader;
 import me.Sound.Sound;
+import me.Totenfluch.TServerClient.Client;
 import me.security.Login;
 
 public class Frame extends JFrame implements KeyListener, MouseListener, MouseMotionListener{
@@ -38,12 +39,10 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 	RainParticle[] particles = new RainParticle[100];
 	int gamespeed = 2;
 
-	long FPSStartTime = 0;
 	public static int[][] Destroyer = new int[999][2];
 	public static int[][] Destroyer2 = new int[999][2];
 	public static int[][] CubeDestroyer = new int[999][2];
-	private int Score = 1;
-	private int Scoreold = 0;
+	private int Score = 0;
 	private int ticks = 0;
 	private boolean lost = false;
 	private int DestroyersOnline = 10;
@@ -67,10 +66,19 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 	public static boolean scoreboard = false;
 	private static boolean MouseInDashboard = false;
 	private Font ftDefault = new Font("TimesRoman", Font.PLAIN, 20);
+	private int WallDestroyerAmount = 30;
+	private int[][] DestroyerWall = new int[WallDestroyerAmount+1][2];
+	private int DestroyerWallXorY = 1;
+	private int DestroyerWallMorP = 1;
+	private int[] StartScoreLevel = {0, 10000, 25000, 30000, 75000};
+
+	private int AntiCheat1 = -10;
+	private int AntiCheat2 = 0;
+
 
 	public Frame()
 	{
-		setTitle("The Epic Game");
+		setTitle("Reflection");
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setLayout(null);
@@ -78,9 +86,9 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		for(int i = 0; i < 999; i++){
 			for(int b = 0; b < 2; b++){
 				if(DestroyersOnline > i){
-					Destroyer[i][b] = OtherStuff.randInt(100, 600);
+					Destroyer[i][b] = OtherStuff.randInt(0, 1020);
 				}else{
-					Destroyer[i][0] = OtherStuff.randInt(100, 600);
+					Destroyer[i][0] = OtherStuff.randInt(0, 1020);
 					Destroyer[i][1] = 1;
 				}
 			}
@@ -89,20 +97,26 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		for(int i = 0; i < 999; i++){
 			for(int b = 0; b < 2; b++){
 				if(Destroyers2Online > i){
-					Destroyer2[i][b] = OtherStuff.randInt(100, 600);
+					Destroyer2[i][b] = OtherStuff.randInt(0, 1020);
 				}else{
-					Destroyer2[i][0] = OtherStuff.randInt(100, 600);
+					Destroyer2[i][0] = OtherStuff.randInt(0, 1020);
 					Destroyer2[i][1] = 1;
 				}
 			}
 		}
 
+		for(int i = 0; i < WallDestroyerAmount; i++){
+			DestroyerWall[i][0] = 10+(i*10);
+			DestroyerWall[i][1] = 1;
+		}
+
+
 		for(int i = 0; i < 999; i++){
 			for(int b = 0; b < 2; b++){
 				if(CubeDestroyerOnline > i){
-					CubeDestroyer[i][b] = OtherStuff.randInt(100, 600);
+					CubeDestroyer[i][b] = OtherStuff.randInt(0, 1020);
 				}else{
-					CubeDestroyer[i][0] = OtherStuff.randInt(100, 600);
+					CubeDestroyer[i][0] = OtherStuff.randInt(0, 1020);
 					CubeDestroyer[i][1] = 1;
 				}
 			}
@@ -146,6 +160,58 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 	public void Update()
 	{
+		//Wall Movin
+
+		if(Score >= StartScoreLevel[2]){
+			for(int i = 0; i < WallDestroyerAmount; i++){
+				for(int b = 0; b < 2; b++){
+					if(DestroyerWallXorY == 1 && DestroyerWallMorP == 1){
+						DestroyerWall[i][1] = DestroyerWall[i][1] + gamespeed+5;
+					}else if(DestroyerWallXorY == 0 && DestroyerWallMorP == 1){
+						DestroyerWall[i][0] = DestroyerWall[i][0] + gamespeed+5;
+					}else if(DestroyerWallXorY == 1 && DestroyerWallMorP == 0){
+						DestroyerWall[i][1] = DestroyerWall[i][1] - (gamespeed+5);
+					}else if(DestroyerWallXorY == 0 && DestroyerWallMorP == 0){
+						DestroyerWall[i][0] = DestroyerWall[i][0] - (gamespeed+5);
+					}
+
+
+
+					if(DestroyerWall[i][1] > 595 && DestroyerWallXorY == 1 && DestroyerWallMorP == 1 ){
+						for(int c = 0 ; c < WallDestroyerAmount; c++){
+							DestroyerWall[c][0] = 1;
+							DestroyerWall[c][1] = 600-(5+(c*10));
+						}
+						DestroyerWallXorY = 0;
+						DestroyerWallMorP = 1;
+					}else if(DestroyerWall[i][0] > 1020  && DestroyerWallXorY == 0 && DestroyerWallMorP == 1 ){
+						for(int c = 0 ; c < WallDestroyerAmount; c++){
+							DestroyerWall[c][0] = 1020-(5+(c*10));
+							DestroyerWall[c][1] = 600;
+						}
+						DestroyerWallXorY = 1;
+						DestroyerWallMorP = 0;
+					}else if(DestroyerWall[i][1] < 0 && DestroyerWallXorY == 1 && DestroyerWallMorP == 0){
+						for(int c = 0 ; c < WallDestroyerAmount; c++){
+							DestroyerWall[c][0] = 1020;
+							DestroyerWall[c][1] = 1+(c*10);
+						}
+						DestroyerWallXorY = 0;
+						DestroyerWallMorP = 0;	
+					}else if(DestroyerWall[i][0] < 0 && DestroyerWallXorY == 0 && DestroyerWallMorP == 0){
+						for(int c = 0 ; c < WallDestroyerAmount; c++){
+							DestroyerWall[c][0] = 10+(c*10);
+							DestroyerWall[c][1] = 1;
+						}
+						DestroyerWallXorY = 1;
+						DestroyerWallMorP = 1;	
+					}
+				}
+			}
+		}
+
+		// Destroyer move
+
 		for(int i = 0; i < DestroyersOnline; i++){
 			for(int b = 0; b < 2; b++){
 				Destroyer[i][b] = Destroyer[i][b] + OtherStuff.randInt(1, gamespeed);
@@ -162,8 +228,9 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 					Destroyer[i][1] = 590;
 				}
 			}
-
 		}
+
+		// Destroyer 2 Move
 
 		for(int i = 0; i < Destroyers2Online; i++){
 			for(int b = 0; b < 2; b++){
@@ -182,6 +249,9 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 				}
 			}
 		}
+
+
+		// CubeDestroyer Move
 
 		for(int i = 0; i < CubeDestroyerOnline; i++){
 			for(int b = 0; b < 2; b++){
@@ -205,6 +275,8 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			}
 
 		}
+
+		// GodmodePowerupball walldetection + move
 
 		if(GodModePowerupballx > 1020){
 			GodModePowerupballx = 0;
@@ -258,88 +330,125 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			}
 		}
 
+		// Collissiondetection
 
-		for(int c = 0; c < DestroyersOnline; c++){
-			if(((Destroyer[c][0] - mousemoveX < 10 && Destroyer[c][0] - mousemoveX > -10) && (Destroyer[c][1] - mousemoveY < 10 && Destroyer[c][1] - mousemoveY > -10))){
-				ForceDeath(c);
-			}else if(((GodModePowerupballx - mousemoveX < 10 && GodModePowerupballx - mousemoveX > -10) && (GodModePowerupbally - mousemoveY < 10 && GodModePowerupbally - mousemoveY > -10))  && GodModePowerupballactive == true){
+		if(Score > StartScoreLevel[0] && Score < StartScoreLevel[2] || Score > StartScoreLevel[3]){
+			for(int c = 0; c < DestroyersOnline; c++){
+				if(((Destroyer[c][0] - mousemoveX < 7 && Destroyer[c][0] - mousemoveX > -7) && (Destroyer[c][1] - mousemoveY < 7 && Destroyer[c][1] - mousemoveY > -7))){
+					ForceDeath(c, 1);
+				}else if(((GodModePowerupballx - mousemoveX < 7 && GodModePowerupballx - mousemoveX > -7) && (GodModePowerupbally - mousemoveY < 7 && GodModePowerupbally - mousemoveY > -7))  && GodModePowerupballactive == true){
+					GodModePowerupballactive = false;
+					GodModePowerup = true;
+					tickdiff = ticks+300;
+				}
+
+			}
+
+			for(int d = 0; d < Destroyers2Online; d++){
+				if(((Destroyer2[d][0] - mousemoveX < 7 && Destroyer2[d][0] - mousemoveX > -7) && (Destroyer2[d][1] - mousemoveY < 7 && Destroyer2[d][1] - mousemoveY > -7 ))){
+					ForceDeath(d, 2);
+				}else if(((GodModePowerupballx - mousemoveX < 7 && GodModePowerupballx - mousemoveX > -7) && (GodModePowerupbally - mousemoveY < 7 && GodModePowerupbally - mousemoveY > -7))  && GodModePowerupballactive == true){
+					GodModePowerupballactive = false;
+					GodModePowerup = true;
+					tickdiff = ticks+300;
+				}
+			}
+		}
+		if(Score > StartScoreLevel[1] && Score < StartScoreLevel[2] || Score > StartScoreLevel[3]){
+			for(int e = 0; e < CubeDestroyerOnline; e++){
+				if(((CubeDestroyer[e][0] - mousemoveX < 7 && CubeDestroyer[e][0] - mousemoveX > -7) && (CubeDestroyer[e][1] - mousemoveY < 7 && CubeDestroyer[e][1] - mousemoveY > -7 ))){
+					ForceDeath(e, 3);
+				}else if(((GodModePowerupballx - mousemoveX < 7 && GodModePowerupballx - mousemoveX > -7) && (GodModePowerupbally - mousemoveY < 7 && GodModePowerupbally - mousemoveY > -7))  && GodModePowerupballactive == true){
+					GodModePowerupballactive = false;
+					GodModePowerup = true;
+					tickdiff = ticks+300;
+				}
+			}
+		}
+
+		if(Score > StartScoreLevel[2]){
+			for(int e = 0; e < WallDestroyerAmount; e++){
+				if(((DestroyerWall[e][0] - mousemoveX < 7 && DestroyerWall[e][0] - mousemoveX > -7) && (DestroyerWall[e][1] - mousemoveY < 7 && DestroyerWall[e][1] - mousemoveY > -7 ))){
+					ForceDeath(e, 3);
+				}else if(((GodModePowerupballx - mousemoveX < 7 && GodModePowerupballx - mousemoveX > -7) && (GodModePowerupbally - mousemoveY < 7 && GodModePowerupbally - mousemoveY > -7))  && GodModePowerupballactive == true){
+					GodModePowerupballactive = false;
+					GodModePowerup = true;
+					tickdiff = ticks+300;
+				}
+			}
+		}
+
+		for(int i=0; i<StartScoreLevel.length; i++){
+			if(Score == StartScoreLevel[i] && Score != 0){
 				GodModePowerupballactive = false;
 				GodModePowerup = true;
 				tickdiff = ticks+300;
 			}
-
-		}
-
-		for(int d = 0; d < Destroyers2Online; d++){
-			if(((Destroyer2[d][0] - mousemoveX < 10 && Destroyer2[d][0] - mousemoveX > -10) && (Destroyer2[d][1] - mousemoveY < 10 && Destroyer2[d][1] - mousemoveY > -10 ))){
-				ForceDeath(d);
-			}else if(((GodModePowerupballx - mousemoveX < 10 && GodModePowerupballx - mousemoveX > -10) && (GodModePowerupbally - mousemoveY < 10 && GodModePowerupbally - mousemoveY > -10))  && GodModePowerupballactive == true){
-				GodModePowerupballactive = false;
-				GodModePowerup = true;
-				tickdiff = ticks+300;
-			}
-		}
-
-		for(int e = 0; e < CubeDestroyerOnline; e++){
-			if(((CubeDestroyer[e][0] - mousemoveX < 10 && CubeDestroyer[e][0] - mousemoveX > -10) && (CubeDestroyer[e][1] - mousemoveY < 10 && CubeDestroyer[e][1] - mousemoveY > -10 ))){
-				ForceDeath(e);
-			}else if(((GodModePowerupballx - mousemoveX < 10 && GodModePowerupballx - mousemoveX > -10) && (GodModePowerupbally - mousemoveY < 10 && GodModePowerupbally - mousemoveY > -10))  && GodModePowerupballactive == true){
-				GodModePowerupballactive = false;
-				GodModePowerup = true;
-				tickdiff = ticks+300;
-			}
 		}
 
 
-
+		// Background
 
 		for(int i = 0; i < particles.length; i++)
 		{
 			particles[i].Update(JHeight);
 		}
 
-		if(Score-1 != Scoreold || GodMode != 300 || tickdiff > ticks+301){
-			JOptionPane.showMessageDialog(null, "CHEATENGINE GAYYYYYYYYYYYY");
-			System.exit(0);
-		}
+
+		// Cheatengine Protect
 
 		if(pausediff < ticks){
 			if(GodMode-ticks < 0){
 				if(disco == false){
 					Score = Score+gamespeed;
-					Scoreold = Scoreold+gamespeed;
+					AntiCheat1 = AntiCheat1+gamespeed;
 				}else if(disco == true){
 					Score = Score+(gamespeed*2);
-					Scoreold = Scoreold+(gamespeed*2);
+					AntiCheat1 = AntiCheat1+(gamespeed*2);
 				}
 
 				if(backgroundon == true){
 					Score++;
-					Scoreold++;
+					AntiCheat1++;
 				}
 			}
 		}
 
 		ticks++;
-
-		if(OtherStuff.randInt(1, 500-gamespeed*35) == 25){
-			Destroyers2Online++;
-		}else if(OtherStuff.randInt(1, 500-gamespeed*35) == 26){
-			DestroyersOnline++;
-		}else if(OtherStuff.randInt(1, 250+gamespeed*80) == 125){
-			GodModePowerupballactive = true;
-		}else if(OtherStuff.randInt(1, 400-gamespeed*35) == 1 && Score > 10000){
-			CubeDestroyerOnline ++;
+		AntiCheat2 = ticks*5;
+		if(Score < StartScoreLevel[2] || Score > StartScoreLevel[3]){
+			if(OtherStuff.randInt(1, 500-gamespeed*35) == 25){
+				Destroyers2Online++;
+			}else if(OtherStuff.randInt(1, 500-gamespeed*35) == 26){
+				DestroyersOnline++;
+			}else if(OtherStuff.randInt(1, 400+gamespeed*80) == 125 && GodModePowerupballactive == false && GodModePowerup == false){
+				GodModePowerupballactive = true;
+			}else if(OtherStuff.randInt(1, 400-gamespeed*35) == 1 && Score > StartScoreLevel[1]){
+				CubeDestroyerOnline ++;
+			}
 		}
 
+		if(Score > StartScoreLevel[2])
+			if(OtherStuff.randInt(1, 500-gamespeed*35) == 25){
+				Destroyers2Online++;
+			}else if(OtherStuff.randInt(1, 500-gamespeed*35) == 26){
+				DestroyersOnline++;
+			}else if(OtherStuff.randInt(1, 400+gamespeed*80) == 125 && GodModePowerupballactive == false && GodModePowerup == false){
+				GodModePowerupballactive = true;
+			}else if(OtherStuff.randInt(1, 400-gamespeed*35) == 1 && Score > StartScoreLevel[1]){
+				CubeDestroyerOnline ++;
+			}
 		if(tickdiff < ticks ){
 			GodModePowerup = false;
 		}
+
+		AntiCheat();
 	}
 
 	public void RestartGame(){
-		Score = 1;
-		Scoreold = 0;
+		Score = 0;
+		AntiCheat1 = -10;
+		AntiCheat2 = 0;
 		ticks = 0;
 		lost = false;
 		gamespeed = 2;
@@ -354,9 +463,9 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		for(int i = 0; i < 999; i++){
 			for(int b = 0; b < 2; b++){
 				if(DestroyersOnline < i){
-					Destroyer[i][b] = OtherStuff.randInt(100, 600);
+					Destroyer[i][b] = OtherStuff.randInt(0, 1020);
 				}else{
-					Destroyer[i][0] = OtherStuff.randInt(100, 600);
+					Destroyer[i][0] = OtherStuff.randInt(0, 1020);
 				}
 			}
 		}
@@ -364,9 +473,9 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		for(int i = 0; i < 999; i++){
 			for(int b = 0; b < 2; b++){
 				if(Destroyers2Online < i){
-					Destroyer2[i][b] = OtherStuff.randInt(100, 600);
+					Destroyer2[i][b] = OtherStuff.randInt(0, 1020);
 				}else{
-					Destroyer2[i][0] = OtherStuff.randInt(100, 600);
+					Destroyer2[i][0] = OtherStuff.randInt(0, 1020);
 				}
 			}
 		}
@@ -374,9 +483,9 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		for(int i = 0; i < 999; i++){
 			for(int b = 0; b < 2; b++){
 				if(CubeDestroyerOnline < i){
-					CubeDestroyer[i][b] = OtherStuff.randInt(100, 600);
+					CubeDestroyer[i][b] = OtherStuff.randInt(0, 1020);
 				}else{
-					CubeDestroyer[i][0] = OtherStuff.randInt(100, 600);
+					CubeDestroyer[i][0] = OtherStuff.randInt(0, 1020);
 				}
 			}
 		}
@@ -447,50 +556,36 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			g.fillOval(GodModePowerupballx, GodModePowerupbally, 10, 10);
 		}
 
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 15)); 
+		if(!Client.IsConnectedToServer == false){
+			g.setColor(Color.GREEN);
+			g.drawString("Connected to ScoreServer!", 635, 620);
+		}else if(Client.disconnected == false){
+			g.setColor(Color.RED);
+			g.drawString("(" + Main.SecoundsToTimeout + ") Not Connected to ScoreServer!", 610, 620);
+		}else{
+			g.setColor(Color.RED);
+			g.drawString("Disconnected.", 710, 620);
+		}
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 20)); 
 
 
-		if(lost == true || MouseInDashboard == true){
+
+
+
+		if(lost == true){
 			g.setColor(Color.CYAN);
 			g.fillOval(mousemoveX, mousemoveY, 10, 10);
-			//g.drawString("                          The Mouse is on the Dashboard, setting it to the cyan oval position.", 20, 625);
+		}else if(MouseInDashboard == true){
+			g.setColor(Color.CYAN);
+			g.fillOval(mousemoveX, mousemoveY, 10, 10);
 			DrawCenteredString(g, Color.CYAN, "The Mouse is on the Dashboard, setting it to the cyan oval position.", JWidth/2, 625);
+		}else if(lost == false){
+			g.drawString("Press STRG(CTRL) for a Scoreboard", 10, 785);
 		}
 
 		if(disco == true && deescalate == 69){
 			currentdestroyercolor = colorrng[OtherStuff.randInt(0, 10)];
-		}
-
-		for(int i = 0; i < DestroyersOnline; i++){
-			if(GodMode-ticks > 0 || GodModePowerup == true){
-				g.setColor(Color.GREEN);
-			}else if(disco == true){
-				g.setColor(currentdestroyercolor);
-			}else{
-				g.setColor(Color.RED);
-			}
-			g.fillOval(Destroyer[i][0], Destroyer[i][1], 10, 10);
-		}
-
-		for(int i = 0; i < Destroyers2Online; i++){
-			if(GodMode-ticks > 0 || GodModePowerup == true ){
-				g.setColor(Color.GREEN);
-			}else if(disco == true){
-				g.setColor(currentdestroyercolor);
-			}else{
-				g.setColor(Color.YELLOW);
-			}
-			g.fillOval(Destroyer2[i][0], Destroyer2[i][1], 10, 10);
-		}
-
-		for(int i = 0; i < CubeDestroyerOnline; i++){
-			if(GodMode-ticks > 0 || GodModePowerup == true){
-				g.setColor(Color.GREEN);
-			}else if(disco == true){
-				g.setColor(currentdestroyercolor);
-			}else{
-				g.setColor(Color.YELLOW);
-			}
-			g.fillRect(CubeDestroyer[i][0], CubeDestroyer[i][1], 10, 10);
 		}
 
 		if(backgroundon == true){
@@ -499,12 +594,27 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 				particles[i].Draw(g);
 			}
 		}
-		
+
 		g.setColor(Color.CYAN);
 		g.fillOval(mousemoveX, mousemoveY, 10, 10);
+
+		if((Score >= StartScoreLevel[0] && Score <= StartScoreLevel[2])|| Score >= StartScoreLevel[3]){
+			DrawLevel(g, 0);
+		}
+		if(Score >= StartScoreLevel[1] && Score <= StartScoreLevel[2]){
+			DrawLevel(g, 1);
+		}
+		if(Score >= StartScoreLevel[2] && Score <= StartScoreLevel[3]){
+			DrawLevel(g, 2);
+		}
+		if(Score >= StartScoreLevel[2]){
+			DrawLevel(g, 1);
+			DrawLevel(g, 2);
+			DrawLevel(g, 0);
+		}
 	}
 
-	private void ForceDeath(int c){
+	private void ForceDeath(int c, int origin){
 		if(GodMode-ticks < 0 && GodModePowerup == false){
 			lost = true;
 			Repaint();
@@ -540,10 +650,64 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			}
 		}else{
 			if(GodMode-ticks < 0){
-				Destroyer2[c][0] = 1;
-				Destroyer[c][0] = 1;
+				if(origin == 1){
+					Destroyer[c][0] = 1;
+				}else if(origin ==2){
+					Destroyer2[c][0] = 1;
+				}else if(origin ==3){
+					CubeDestroyer[c][0] = 1;
+				}
 				Score = Score+500;
-				Scoreold = Scoreold+500;
+				AntiCheat1 = AntiCheat1+500;
+			}
+		}
+	}
+
+
+	private void DrawLevel(Graphics g, int level){
+		if(level == 0){
+			for(int i = 0; i < DestroyersOnline; i++){
+				if(GodMode-ticks > 0 || GodModePowerup == true){
+					g.setColor(Color.GREEN);
+				}else if(disco == true){
+					g.setColor(currentdestroyercolor);
+				}else{
+					g.setColor(Color.RED);
+				}
+				g.fillOval(Destroyer[i][0], Destroyer[i][1], 10, 10);
+			}
+
+			for(int i = 0; i < Destroyers2Online; i++){
+				if(GodMode-ticks > 0 || GodModePowerup == true ){
+					g.setColor(Color.GREEN);
+				}else if(disco == true){
+					g.setColor(currentdestroyercolor);
+				}else{
+					g.setColor(Color.YELLOW);
+				}
+				g.fillOval(Destroyer2[i][0], Destroyer2[i][1], 10, 10);
+			}
+		}else if(level == 1){
+			for(int i = 0; i < CubeDestroyerOnline; i++){
+				if(GodMode-ticks > 0 || GodModePowerup == true){
+					g.setColor(Color.GREEN);
+				}else if(disco == true){
+					g.setColor(currentdestroyercolor);
+				}else{
+					g.setColor(Color.YELLOW);
+				}
+				g.fillRect(CubeDestroyer[i][0], CubeDestroyer[i][1], 10, 10);
+			}
+		}else if(level == 2){
+			for(int i = 0; i < WallDestroyerAmount; i++){
+				if(GodMode-ticks > 0 || GodModePowerup == true){
+					g.setColor(Color.GREEN);
+				}else if(disco == true){
+					g.setColor(currentdestroyercolor);
+				}else{
+					g.setColor(Color.darkGray);
+				}
+				g.fillOval(DestroyerWall[i][0], DestroyerWall[i][1], 10, 10);
 			}
 		}
 	}
@@ -557,6 +721,15 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 		g.setColor(color);
 		g.drawString(s, xPos, yPos);
+	}
+
+	private void AntiCheat(){
+		if(GodMode != 300 || AntiCheat2/5 != ticks || tickdiff > ticks + 301 || Score != AntiCheat1+10 || gamespeed>10){
+			System.out.println("Score:" + Score + " Anticheat1: " + AntiCheat1);
+			Client.processMessage("/IamUsingCheatEngine");
+			JOptionPane.showMessageDialog(null, "CHEATENGINE GAYYYYYYYYYYYY");
+			System.exit(0);
+		}
 	}
 
 	@Override
@@ -585,6 +758,10 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			}else if(disco == false){
 				disco = true;
 			}
+		}
+		if(key == KeyEvent.VK_CONTROL){
+			Main.OpenScoreBoard();
+			Main.GamePaused = true;
 		}
 		if(key == KeyEvent.VK_ESCAPE){
 			Main.GamePaused = true;
@@ -615,6 +792,11 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		int key = e.getKeyCode();
+		if(key == KeyEvent.VK_CONTROL){
+			Main.CloseScoreBoard();
+			Main.GamePaused = false;
+		}
 	}
 
 	@Override
@@ -651,7 +833,16 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-	}
+		if(e.getY() > 594){
+			mousemoveY = 594;
+			MouseInDashboard = true;
+		}else{
+			mousemoveY = e.getY()-5;
+			MouseInDashboard = false;
+		}
+		mousemoveX = e.getX()-5;
+		Repaint();
+	}	
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
