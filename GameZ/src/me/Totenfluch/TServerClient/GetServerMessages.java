@@ -43,6 +43,7 @@ public class GetServerMessages{
 			} catch (IOException e){
 				e.printStackTrace();
 			}
+			Client.disconnected = true;
 			Client.IsConnectedToServer = false;
 		}
 

@@ -23,7 +23,7 @@ import me.security.RegisterWindow;
 public class Main 
 {
 	public static boolean devbuild = false;
-	public static double Version = 6.5;
+	public static double Version = 6.6;
 	public static String DevState = "Beta";
 	private static LoginWindow loginframe;
 	private static Timer timer = null;

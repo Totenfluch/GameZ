@@ -71,7 +71,8 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 	private int DestroyerWallXorY = 1;
 	private int DestroyerWallMorP = 1;
 	private int[] StartScoreLevel = {0, 10000, 25000, 30000, 75000};
-
+	private int Leveluptickdiff = 0;
+	private boolean ShowLevelUp = false;
 	private int AntiCheat1 = -10;
 	private int AntiCheat2 = 0;
 
@@ -378,11 +379,17 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			}
 		}
 
+		
+		// Godmode at Level change
+		
 		for(int i=0; i<StartScoreLevel.length; i++){
-			if(Score == StartScoreLevel[i] && Score != 0){
+			if(((Score - StartScoreLevel[i] < 25 && Score - StartScoreLevel[i] > -25) && (Score - StartScoreLevel[i] < 25 && Score - StartScoreLevel[i] > -25 )) && GodModePowerup == false && Score > 500){
 				GodModePowerupballactive = false;
 				GodModePowerup = true;
 				tickdiff = ticks+300;
+				
+				ShowLevelUp = true;
+				Leveluptickdiff = ticks+300;
 			}
 		}
 
@@ -441,6 +448,11 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		if(tickdiff < ticks ){
 			GodModePowerup = false;
 		}
+		
+		if(Leveluptickdiff < ticks){
+			ShowLevelUp = false;
+		}
+		
 
 		AntiCheat();
 	}
@@ -556,22 +568,21 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			g.fillOval(GodModePowerupballx, GodModePowerupbally, 10, 10);
 		}
 
-		g.setFont(new Font("TimesRoman", Font.PLAIN, 15)); 
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 20)); 
 		if(!Client.IsConnectedToServer == false){
 			g.setColor(Color.GREEN);
-			g.drawString("Connected to ScoreServer!", 635, 620);
+			g.drawString("Connected to ScoreServer!", 800, 785);
 		}else if(Client.disconnected == false){
 			g.setColor(Color.RED);
-			g.drawString("(" + Main.SecoundsToTimeout + ") Not Connected to ScoreServer!", 610, 620);
+			g.drawString("(" + Main.SecoundsToTimeout + ") Not Connected to ScoreServer!", 530, 785);
 		}else{
 			g.setColor(Color.RED);
-			g.drawString("Disconnected.", 710, 620);
+			g.drawString("Disconnected.", 890, 785);
 		}
-		g.setFont(new Font("TimesRoman", Font.PLAIN, 20)); 
 
-
-
-
+		if(ShowLevelUp == true){
+			DrawCenteredString(g, Color.ORANGE, "Level up!", JWidth/2, 75);
+		}
 
 		if(lost == true){
 			g.setColor(Color.CYAN);
@@ -580,7 +591,9 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			g.setColor(Color.CYAN);
 			g.fillOval(mousemoveX, mousemoveY, 10, 10);
 			DrawCenteredString(g, Color.CYAN, "The Mouse is on the Dashboard, setting it to the cyan oval position.", JWidth/2, 625);
-		}else if(lost == false){
+		}
+		if(lost == false){
+			g.setColor(Color.GREEN);
 			g.drawString("Press STRG(CTRL) for a Scoreboard", 10, 785);
 		}
 
