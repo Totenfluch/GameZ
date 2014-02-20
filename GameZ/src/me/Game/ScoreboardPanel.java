@@ -144,8 +144,7 @@ class ScoreboardPanel extends JFrame implements KeyListener{
 								window.dispose();
 							}
 						}
-						//g2d.drawImage(ResourceLoader.ImageLoad("/reload.png"), 770, 520, 20, 20, null);
-						//g2d.drawImage(ResourceLoader.ImageLoad("/Close.png"), 690, 520, 70, 20, null);
+						
 						if(e.getX() >= 770 && e.getX() <= 790 && e.getY() >= 520 && e.getY() <= 540){
 							OtherStuff.GetMOTD();
 							repaint();

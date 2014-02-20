@@ -23,7 +23,7 @@ import me.security.RegisterWindow;
 public class Main 
 {
 	public static boolean devbuild = false;
-	public static double Version = 6.6;
+	public static double Version = 7.1;
 	public static String DevState = "Beta";
 	private static LoginWindow loginframe;
 	private static Timer timer = null;
@@ -78,17 +78,17 @@ public class Main
 				loginframe.Repaint();
 			}
 		});
+		timeout = new Timer (10, new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				SecoundsToTimeout--;
+			}
+		});
 		logintimer.start();
 		OtherStuff.GetMOTD();
 		OtherStuff.GettrueMOTD();
 
 		OtherStuff.MakeValid();
 		
-		timeout = new Timer (1000, new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				SecoundsToTimeout--;
-			}
-		});
 		timeout.start();
 		String host = "188.194.13.44";
 		int port = Integer.parseInt("9977");
