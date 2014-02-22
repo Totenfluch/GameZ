@@ -78,7 +78,7 @@ public class Main
 				loginframe.Repaint();
 			}
 		});
-		timeout = new Timer (10, new ActionListener(){
+		timeout = new Timer (1000, new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				SecoundsToTimeout--;
 			}
@@ -90,7 +90,7 @@ public class Main
 		OtherStuff.MakeValid();
 		
 		timeout.start();
-		String host = "188.194.13.44";
+		String host = "188.193.227.102";
 		int port = Integer.parseInt("9977");
 		@SuppressWarnings("unused")
 		final Client chatframe = new Client(host, port);
@@ -155,11 +155,6 @@ public class Main
 		});
 		timer.start();
 		logintimer.stop();
-		/*scoreboardtimer = new Timer (10, new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				Main.menuframe.Repaint();
-			}
-		});*/
 	}
 
 	public static void OpenRegisterWindow(){

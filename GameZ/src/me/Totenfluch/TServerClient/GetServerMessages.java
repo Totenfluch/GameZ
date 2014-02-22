@@ -47,18 +47,6 @@ public class GetServerMessages{
 			Client.IsConnectedToServer = false;
 		}
 
-		else if(message.startsWith("broadcast")){
-			if(message.startsWith("broadcast Your version is no longer supported.")){
-				Client.disconnected = true;
-				Main.OnlineMode = false;
-			}
-			String msg = message.replace("broadcast", "");
-			msg = message.replace("*", "");
-			msg = message.replace("_", " ");
-			msg = message.replace("broadcast", "Server: ");
-			JOptionPane.showMessageDialog(null, msg);
-		}
-
 		else if(message.startsWith("forcelogin")){
 			String[] temp = message.split(" ");
 			Login.ActiveUser = temp[1];
@@ -69,7 +57,7 @@ public class GetServerMessages{
 			Login.truelogin();
 		}
 
-		else if(message.startsWith("Account") && message.contains("created")){
+		else if(message.startsWith("broadcast Account") && message.contains("created")){
 			Main.CloseRegisterWindow();
 			if(LoginWindow.remembermecheckbox.isSelected() == false){
 				LoginWindow.Username.setText(RegisterWindow.lastregisteredusername);
@@ -77,6 +65,18 @@ public class GetServerMessages{
 				LoginWindow.remembermecheckbox.setSelected(true);
 			}
 
+		}
+		
+		else if(message.startsWith("broadcast")){
+			if(message.startsWith("broadcast Your version is no longer supported.")){
+				Client.disconnected = true;
+				Main.OnlineMode = false;
+			}
+			String msg = message.replace("broadcast", "");
+			msg = message.replace("*", "");
+			msg = message.replace("_", " ");
+			msg = message.replace("broadcast", "Server: ");
+			JOptionPane.showMessageDialog(null, msg);
 		}
 	}
 }
