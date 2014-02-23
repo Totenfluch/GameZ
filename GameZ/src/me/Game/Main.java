@@ -23,15 +23,16 @@ import me.security.RegisterWindow;
 public class Main 
 {
 	public static boolean devbuild = false;
-	public static double Version = 7.1;
-	public static String DevState = "Beta";
+	public static double Version = 10.0;
+	public static String DevState = "Release";
 	private static LoginWindow loginframe;
 	private static Timer timer = null;
 	private static Timer logintimer = null;
 	public static Timer timeout = null;
 	public static int SecoundsToTimeout = 20;
 	public static Timer scoreboardtimer = null;
-	public static InetAddress ComputerIP;
+	public static InetAddress lComputerIP;
+	public static String ComputerIP;
 	public static String ComputerMac;
 	public static String ComputerName;
 	public static boolean Valid = false;
@@ -44,12 +45,13 @@ public class Main
 	public static void main(String[] args)
 	{	
 		try {
-			ComputerIP = InetAddress.getLocalHost();
+			lComputerIP = InetAddress.getLocalHost();
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		}
 		ComputerMac = OtherStuff.getMacAdress();
-		ComputerName = ComputerIP.getHostName();
+		ComputerName = lComputerIP.getHostName();
+		ComputerIP = lComputerIP.getHostAddress();
 		
 		java.net.URL imageURL = Main.class.getResource("/icon_login.png");
 		ImageIcon img = null;
@@ -64,11 +66,9 @@ public class Main
 		}
 
 		registerframe = new RegisterWindow();
-		//registerframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		loginframe = new LoginWindow();
 		loginframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//loginframe.setUndecorated(true);
 		loginframe.setVisible(true);
 		loginframe.initialize();
 		loginframe.Repaint();

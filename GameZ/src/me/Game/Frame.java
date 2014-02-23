@@ -46,46 +46,46 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 	private boolean lost = false;
 
 	private int pausediff = 0;
-	
+
 	private boolean backgroundon = true;
 
 	private Font ftDefault = new Font("TimesRoman", Font.PLAIN, 20);
-	
+
 	private boolean disco = false;
 	private Color colorrng[] = {Color.red, Color.blue, Color.BLACK, Color.GRAY, Color.BLUE, Color.CYAN, Color.MAGENTA, Color.YELLOW, Color.WHITE, Color.LIGHT_GRAY, Color.darkGray}; 
 	private int deescalate = 0;
 	private Color currentbackground = null;
 	private Color currentdestroyercolor = Color.RED;
-	
-	private int[] StartScoreLevel = {0, 10000, 20000, 25000, 30000, 40000, 60000, 80000, 85000, 100000, 10000000};
-	//								 1 		2 	 3	    4 	   5 	   6     7     8	   9	   10
-	
+
+	private int[] StartScoreLevel = {0, 10000, 20000, 25000, 30000, 40000, 60000, 80000, 85000, 100000, 115000, 10000000};
+	//								 1 		2 	 3	    4 	   5 	   6     7     8	   9	   10      11      1337
+
 	private int Leveluptickdiff = 0;
 	private boolean ShowLevelUp = false;
 
 	private int GodMode = 300;
-	
+
 	private boolean GodModePowerup = false;
 	private int godmodesequence = 1;
 	private int godmodesequencecount = 150;
 	private int GodModePowerupballx = OtherStuff.randInt(100, 1000);
 	private int GodModePowerupbally = OtherStuff.randInt(100, 600);
 	private boolean GodModePowerupballactive = false;
-	
+
 	private int DestroyersOnline = 10;
 	public static int[][] Destroyer = new int[999][2];
-	
+
 	private int Destroyers2Online = 10;
 	public static int[][] Destroyer2 = new int[999][2];
-	
+
 	private int CubeDestroyerOnline = 0;
 	public static int[][] CubeDestroyer = new int[999][2];
-	
+
 	private int WallDestroyerAmount = 30;
 	private int[][] DestroyerWall = new int[WallDestroyerAmount+1][2];
 	private int DestroyerWallXorY = 1;
 	private int DestroyerWallMorP = 1;
-	
+
 	private int CircleDestestroyerAmount = 60;
 	private double[] CircleDestroyerPos = new double[CircleDestestroyerAmount+1];
 	private double[][] CircleDestroyer = new double[CircleDestestroyerAmount+1][2];
@@ -96,6 +96,8 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 	private double[] SpiralDestroyerPos =  new double[CircleDestestroyerAmount+1];
 	private double SpiralSpeed = 0.025;
 	private int SpiralPointDistance = 10;
+
+	private double[][] AreaDestroyerBounds = new double[2][2];
 
 	private int CurrentLevel = 1;
 	private String ActiveDestroyers = "1";
@@ -354,7 +356,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 			for(int e = 0; e < WallDestroyerAmount; e++){
 				if(((DestroyerWall[e][0] - mousemoveX < 7 && DestroyerWall[e][0] - mousemoveX > -7) && (DestroyerWall[e][1] - mousemoveY < 7 && DestroyerWall[e][1] - mousemoveY > -7 ))){
-					ForceDeath(e, 3);
+					ForceDeath(e, 4);
 				}else if(((GodModePowerupballx - mousemoveX < 7 && GodModePowerupballx - mousemoveX > -7) && (GodModePowerupbally - mousemoveY < 7 && GodModePowerupbally - mousemoveY > -7))  && GodModePowerupballactive == true){
 					GodModePowerupballactive = false;
 					GodModePowerup = true;
@@ -365,7 +367,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 		if(ActiveDestroyers.contains("4")){
 			for(int i = 0; i < SpiralDestestroyerAmount; i++){
-				SpiralDestroyerPos[i] = SpiralDestroyerPos[i]+SpiralSpeed;
+				SpiralDestroyerPos[i] = SpiralDestroyerPos[i]+SpiralSpeed*(gamespeed/2);
 				double x = 5*SpiralDestroyerPos[i]*Math.cos(SpiralDestroyerPos[i]);
 				double y = 5*SpiralDestroyerPos[i]*Math.sin(SpiralDestroyerPos[i]);
 				SpiralDestroyer[i][0] = x+510;
@@ -377,7 +379,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 			for(int e = 0; e < SpiralDestestroyerAmount; e++){
 				if(((SpiralDestroyer[e][0] - mousemoveX < 7 && SpiralDestroyer[e][0] - mousemoveX > -7) && (SpiralDestroyer[e][1] - mousemoveY < 7 && SpiralDestroyer[e][1] - mousemoveY > -7 ))){
-					ForceDeath(e, 3);
+					ForceDeath(e, 5);
 				}else if(((GodModePowerupballx - mousemoveX < 7 && GodModePowerupballx - mousemoveX > -7) && (GodModePowerupbally - mousemoveY < 7 && GodModePowerupbally - mousemoveY > -7))  && GodModePowerupballactive == true){
 					GodModePowerupballactive = false;
 					GodModePowerup = true;
@@ -400,13 +402,30 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 			for(int e = 0; e < CircleDestestroyerAmount; e++){
 				if(((CircleDestroyer[e][0] - mousemoveX < 7 && CircleDestroyer[e][0] - mousemoveX > -7) && (CircleDestroyer[e][1] - mousemoveY < 7 && CircleDestroyer[e][1] - mousemoveY > -7 ))){
-					ForceDeath(e, 3);
+					ForceDeath(e, 6);
 				}else if(((GodModePowerupballx - mousemoveX < 7 && GodModePowerupballx - mousemoveX > -7) && (GodModePowerupbally - mousemoveY < 7 && GodModePowerupbally - mousemoveY > -7))  && GodModePowerupballactive == true){
 					GodModePowerupballactive = false;
 					GodModePowerup = true;
 					tickdiff = ticks+300;
 				}
 			}
+		}
+
+		if(ActiveDestroyers.contains("6")){
+			for(int i=0; i<1 ; i++){
+				AreaDestroyerBounds[i][1]+=0.25;
+				AreaDestroyerBounds[i][0]+=0.48;
+				if(AreaDestroyerBounds[i][0] > 600){
+					AreaDestroyerBounds[i][0] = 0;
+				}
+				if(AreaDestroyerBounds[i][1] > 1020){
+					AreaDestroyerBounds[i][1] = 0;
+				}
+
+				if(mousemoveX <= AreaDestroyerBounds[0][0]-1 || mousemoveX >= 1009-AreaDestroyerBounds[0][0] || mousemoveY <= AreaDestroyerBounds[0][1] || mousemoveY >= 590-AreaDestroyerBounds[0][1]){
+					ForceDeath(i, 7);
+				}
+			}	
 		}
 
 		if(GodModePowerupballx > 1020){
@@ -492,6 +511,8 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			ActiveDestroyers = "51";
 		}else if(CurrentLevel == 10){
 			ActiveDestroyers = "524";
+		}else if(CurrentLevel == 11){
+			ActiveDestroyers = "6";
 		}
 
 
@@ -722,6 +743,9 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		if(ActiveDestroyers.contains("5")){
 			DrawLevel(g, 5);
 		}
+		if(ActiveDestroyers.contains("6")){
+			DrawLevel(g, 6);
+		}
 
 	}
 
@@ -730,6 +754,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			lost = true;
 			Repaint();
 			Sound.stopSound();
+			Main.GamePaused = true;
 			double diff = Score/(ticks-300);
 			Object[] options = {"Retry",
 					"Quit", "Submit Score & Retry", "Submit Score & Quit", "Submit, Logout & Quit"};
@@ -744,11 +769,13 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 			if(n == 0){
 				RestartGame();
+				Main.GamePaused = false;
 			}else if(n == 1){
 				System.exit(0);
 			}else if(n == 2){
 				OtherStuff.PublishScore(Score, Login.ActiveUser);
 				RestartGame();
+				Main.GamePaused = false;
 			}else if(n == 3){
 				OtherStuff.PublishScore(Score, Login.ActiveUser);
 				JOptionPane.showMessageDialog(null, "Score published! bye");
@@ -758,18 +785,23 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 				System.exit(0);
 			}else{
 				RestartGame();
+				Main.GamePaused = false;
 			}
 		}else{
 			if(GodMode-ticks < 0){
 				if(origin == 1){
 					Destroyer[c][0] = 1;
-				}else if(origin ==2){
+					Score = Score+500;
+					AntiCheat1 = AntiCheat1+500;
+				}else if(origin == 2){
 					Destroyer2[c][0] = 1;
-				}else if(origin ==3){
+					Score = Score+500;
+					AntiCheat1 = AntiCheat1+500;
+				}else if(origin == 3){
 					CubeDestroyer[c][0] = 1;
+					Score = Score+500;
+					AntiCheat1 = AntiCheat1+750;
 				}
-				Score = Score+500;
-				AntiCheat1 = AntiCheat1+500;
 			}
 		}
 	}
@@ -850,6 +882,30 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 				if(CircleDestroyer[i][1] < 600){
 					g.drawOval((int)Math.floor(CircleDestroyer[i][0]), (int)Math.floor(CircleDestroyer[i][1]), 10, 10);
 				}
+			}
+		}
+		else if(level == 6){
+			if(GodMode-ticks > 0 || GodModePowerup == true){
+				g.setColor(Color.GREEN);
+				g.fillRect(0, 0, 1020, (int) AreaDestroyerBounds[0][1]);
+				g.fillRect((int) (1020-AreaDestroyerBounds[0][0]), 0, (int) AreaDestroyerBounds[0][0], 600);
+				g.fillRect(0, (int)(600-AreaDestroyerBounds[0][1]), 1020, (int)(AreaDestroyerBounds[0][1]));
+				g.fillRect(0, 0, (int)(AreaDestroyerBounds[0][0]), 600);
+			}else if(disco == true){
+				g.setColor(currentdestroyercolor);
+				g.fillRect(0, 0, 1020, (int) AreaDestroyerBounds[0][1]);
+				g.fillRect((int) (1020-AreaDestroyerBounds[0][0]), 0, (int) AreaDestroyerBounds[0][0], 600);
+				g.fillRect(0, (int)(600-AreaDestroyerBounds[0][1]), 1020, (int)(AreaDestroyerBounds[0][1]));
+				g.fillRect(0, 0, (int)(AreaDestroyerBounds[0][0]), 600);
+			}else{
+				g.setColor(Color.RED);
+				g.fillRect(0, 0, 1020, (int) AreaDestroyerBounds[0][1]);
+				g.setColor(Color.YELLOW);
+				g.fillRect((int) (1020-AreaDestroyerBounds[0][0]), 0, (int) AreaDestroyerBounds[0][0], 600);
+				g.setColor(Color.ORANGE);
+				g.fillRect(0, (int)(600-AreaDestroyerBounds[0][1]), 1020, (int)(AreaDestroyerBounds[0][1]));
+				g.setColor(Color.darkGray);
+				g.fillRect(0, 0, (int)(AreaDestroyerBounds[0][0]), 600);
 			}
 		}
 	}
