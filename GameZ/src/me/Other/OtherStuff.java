@@ -2,7 +2,13 @@ package me.Other;
 
 import java.awt.Desktop;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.URI;
@@ -15,10 +21,13 @@ import javax.swing.JOptionPane;
 
 import me.Game.Main;
 import me.Totenfluch.TServerClient.Client;
+import me.security.DataCrypter;
 import me.security.LoginWindow;
 
 public class OtherStuff {
 	public static String[] scores = new String[103];
+	public static String[] news = new String[9999];
+
 	public static void openwebsite(String url){
 		try {
 			Desktop dt = Desktop.getDesktop();
@@ -28,17 +37,6 @@ public class OtherStuff {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static String TheNormalTime(){
-		Calendar cal = Calendar.getInstance();
-		cal.getTime();
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-		String time = sdf.format(cal.getTime());
-		String closebracket = "[";
-		String openbracket = "]";
-		String currenttime = closebracket + time + openbracket ;
-		return currenttime;
 	}
 
 	public static String TheAuthmeTime(){
@@ -114,7 +112,6 @@ public class OtherStuff {
 	public static int randInt(int min, int max) {
 		Random rand = new Random();
 		int randomNum = rand.nextInt((max - min) + 1) + min;
-
 		return randomNum;
 	}
 
@@ -169,14 +166,159 @@ public class OtherStuff {
 			URL oracle = new URL("https://dl.dropboxusercontent.com/u/88851086/ReflectionNews.txt");
 			BufferedReader in = new BufferedReader(
 					new InputStreamReader(oracle.openStream()));
-
+			int i = 0;
 			String inputLine;
 			while ((inputLine = in.readLine()) != null){
 				LoginWindow.trueMOTD.append(inputLine + "\n");
+				news[i] = inputLine;
+				i++;
 			}               
 		}catch(Exception e){
 			e.printStackTrace();
 		}
+	}
+
+	public static String TheNormalTime(){
+		Calendar cal = Calendar.getInstance();
+		cal.getTime();
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		String time = sdf.format(cal.getTime());
+		String currenttime =  time ;
+		return currenttime;
+	}
+
+	public static void ReadStatsFromFile(){
+		String filepath = System.getenv().get("APPDATA") + "\\Reflection\\Stats.txt";
+		String folderpath = System.getenv().get("APPDATA") + "\\Reflection";
+		File file = new File(filepath);
+		if(file.exists()){
+			try{
+				BufferedReader br = new BufferedReader(new FileReader(filepath));
+
+				String inputLine;
+				int i = 0;
+				while ((inputLine = br.readLine()) != null){
+					String[] temp;
+					temp = inputLine.split(" ");
+					inputLine = temp[0];
+					
+					if(i == 0){
+						StatSaver.TimesPlayed = Integer.parseInt(DataCrypter.decrypt2(inputLine));
+					}else if(i == 1){
+						StatSaver.MaxScore = Integer.parseInt(DataCrypter.decrypt2(inputLine));
+					}else if(i == 2){
+						StatSaver.BestRank = Integer.parseInt(DataCrypter.decrypt2(inputLine));
+					}else if(i == 3){
+						StatSaver.MostTicksSurvived = Integer.parseInt(DataCrypter.decrypt2(inputLine));
+					}else if(i == 4){
+						StatSaver.GodModesCollected = Integer.parseInt(DataCrypter.decrypt2(inputLine));
+					}else if(i == 5){
+						StatSaver.TimesDied = Integer.parseInt(DataCrypter.decrypt2(inputLine));
+					}else if(i == 6){
+						StatSaver.BestLevel = Integer.parseInt(DataCrypter.decrypt2(inputLine));
+					}
+					i++;			
+				}
+				if(i!=7){
+					StatSaver.TimesPlayed = 0;
+					StatSaver.MaxScore = 0;
+					StatSaver.BestRank = 0;
+					StatSaver.MostTicksSurvived = 0;
+					StatSaver.GodModesCollected = 0;
+					StatSaver.TimesDied = 0;
+					StatSaver.BestLevel = 0;
+					JOptionPane.showMessageDialog(null, "Thanks for editing the Stats.txt! you've broken it now ! Congratulations! Delete it to reset it...");
+				}
+				i = 0;
+				br.close();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}else{
+			File gameFolder = new File(folderpath);
+			if (!gameFolder.exists()) {
+			    // Folder doesn't exist. Create it
+			    if (gameFolder.mkdir()) {
+			        // Folder created
+			        File gameFile = new File(filepath);
+			        if (!gameFile.exists()) {
+			            // File doesn't exists, create it
+			            try {
+			                if (gameFile.createNewFile()) {
+			                    // mGameFile created in %APPDATA%\myGame !
+			                }
+			                else {
+			                    // Error
+			                }
+			            } catch (IOException ex) {
+			                // Handle exceptions here
+			            }
+			        }
+			        else {
+			            // File exists
+			        }
+			    }
+			    else {
+			        // Error
+			    }
+			}
+			else {
+			    // Folder exists
+			}
+			
+			PrintWriter out = null;
+			try {
+				out = new PrintWriter(new BufferedWriter(new FileWriter(filepath, true)));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			out.println(DataCrypter.encrypt2("0"));
+			out.println(DataCrypter.encrypt2("0"));
+			out.println(DataCrypter.encrypt2("0"));
+			out.println(DataCrypter.encrypt2("0"));
+			out.println(DataCrypter.encrypt2("0"));
+			out.println(DataCrypter.encrypt2("0"));
+			out.println(DataCrypter.encrypt2("0"));
+			out.close();
+			
+			StatSaver.TimesPlayed = 0;
+			StatSaver.MaxScore = 0;
+			StatSaver.BestRank = 0;
+			StatSaver.MostTicksSurvived = 0;
+			StatSaver.GodModesCollected = 0;
+			StatSaver.TimesDied = 0;
+			StatSaver.BestLevel = 0;
+			
+		}
+	}
+
+	public static void SaveStatsToFile(){
+		StatSaver.waitfortask = true;
+		String filepath = System.getenv().get("APPDATA") + "\\Reflection\\Stats.txt";
+		try {
+			File file = new File(filepath);
+			file.delete();
+			file.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		PrintWriter out;
+		try {
+			out = new PrintWriter(new BufferedWriter(new FileWriter(filepath, true)));
+			out.println(DataCrypter.encrypt2(""+StatSaver.TimesPlayed));
+			out.println(DataCrypter.encrypt2(""+StatSaver.MaxScore));
+			out.println(DataCrypter.encrypt2(""+StatSaver.BestRank));
+			out.println(DataCrypter.encrypt2(""+StatSaver.MostTicksSurvived));
+			out.println(DataCrypter.encrypt2(""+StatSaver.GodModesCollected));
+			out.println(DataCrypter.encrypt2(""+StatSaver.TimesDied));
+			out.println(DataCrypter.encrypt2(""+StatSaver.BestLevel));
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		StatSaver.waitfortask = false;
 	}
 
 

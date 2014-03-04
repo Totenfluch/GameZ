@@ -54,7 +54,8 @@ public class GetServerMessages{
 		}
 
 		else if(message.equals("Authorized")){
-			Login.truelogin();
+			//Login.truelogin();
+			Main.OpenMainMenu();
 		}
 
 		else if(message.startsWith("broadcast Account") && message.contains("created")){

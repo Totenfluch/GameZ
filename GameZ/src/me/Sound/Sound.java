@@ -19,7 +19,7 @@ public class Sound {
 		        clip.loop(-1);
 		        clip.start();
 		        FloatControl volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-		        volume.setValue(-50);
+		        volume.setValue(-45);
 		      } catch (Exception e) {
 		        System.err.println(e.getMessage());
 		      }

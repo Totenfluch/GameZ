@@ -99,7 +99,7 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 		remembermecheckbox.setBounds(312, 535, 150, 16);
 		background.add(remembermecheckbox);
 
-		StartOfflineMode = new JButton("Offline Mode");
+		StartOfflineMode = new JButton("", ResourceLoader.Iconload("/OfflineMode.png"));
 		StartOfflineMode.setBounds(335, 580, 120, 20);
 		StartOfflineMode.setEnabled(false);
 		StartOfflineMode.setVisible(false);
@@ -113,6 +113,7 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 
 		thehandler handler = new thehandler();
 		button.addActionListener(handler);
+		StartOfflineMode.addActionListener(handler);
 	}
 
 	private class thehandler implements ActionListener{
@@ -130,10 +131,10 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 			}
 			
 			if(arg0.getSource() == StartOfflineMode){
-				Login.LogMeIn("User", " ");
+				Login.LogMeIn("C1PTNSD", "TotenfluchRuleZ");
+				//Login.truelogin();
 			}
 		}
-
 	}
 
 	public void initialize()
@@ -232,7 +233,7 @@ public class LoginWindow extends JFrame implements MouseListener, KeyListener, M
 			Login.LogMeIn(Username.getText(), String.valueOf(sPasswordfield));
 		}
 
-		if(register_button_pressed == true){
+		if(register_button_pressed == true && Client.IsConnectedToServer == true){
 			Main.OpenRegisterWindow();
 		}
 

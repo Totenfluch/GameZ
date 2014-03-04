@@ -5,6 +5,7 @@ import javax.swing.JOptionPane;
 
 import me.Game.Main;
 import me.Other.RememberMeClass;
+import me.Other.StatSaver;
 import me.Totenfluch.TServerClient.Client;
 
 public class Login {
@@ -18,9 +19,11 @@ public class Login {
 				Main.StartGame();
 				ActiveUser = Username;
 			}else if(Main.OnlineMode == false && Client.disconnected == true){
-				Main.DisableLoginWindow();
-				Main.StartGame();
-				ActiveUser = Username;
+				if(Username.equals("C1PTNSD")){
+					Main.DisableLoginWindow();
+					Main.StartGame();
+					ActiveUser = Username;
+				}
 			}else{
 				// Check Password here
 				ActiveUser = Username;
@@ -44,5 +47,6 @@ public class Login {
 	public static void truelogin(){
 		Main.DisableLoginWindow();
 		Main.StartGame();
+		StatSaver.SaveStat("TimesPlayed", 1, 1);
 	}
 }

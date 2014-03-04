@@ -15,6 +15,7 @@ import javax.swing.Timer;
 
 import me.Other.OtherStuff;
 import me.Other.RememberMeClass;
+import me.Other.StatSaver;
 import me.Sound.Sound;
 import me.Totenfluch.TServerClient.Client;
 import me.security.LoginWindow;
@@ -23,12 +24,13 @@ import me.security.RegisterWindow;
 public class Main 
 {
 	public static boolean devbuild = false;
-	public static double Version = 10.0;
+	public static double Version = 10.4;
 	public static String DevState = "Release";
 	private static LoginWindow loginframe;
 	private static Timer timer = null;
 	private static Timer logintimer = null;
 	public static Timer timeout = null;
+	public static Timer menutimer = null;
 	public static int SecoundsToTimeout = 20;
 	public static Timer scoreboardtimer = null;
 	public static InetAddress lComputerIP;
@@ -40,10 +42,13 @@ public class Main
 	private static ImageIcon img2;
 	private static RegisterWindow registerframe;
 	public static ScoreboardPanel ScoreBoard;
+	public static MainMenu mainmenu;
 	public static boolean OnlineMode = true;
+	public static Timer SaveToFileTimer = null;
 
 	public static void main(String[] args)
-	{	
+	{
+
 		try {
 			lComputerIP = InetAddress.getLocalHost();
 		} catch (UnknownHostException e1) {
@@ -52,7 +57,7 @@ public class Main
 		ComputerMac = OtherStuff.getMacAdress();
 		ComputerName = lComputerIP.getHostName();
 		ComputerIP = lComputerIP.getHostAddress();
-		
+
 		java.net.URL imageURL = Main.class.getResource("/icon_login.png");
 		ImageIcon img = null;
 		if (imageURL != null) {
@@ -69,15 +74,16 @@ public class Main
 
 		loginframe = new LoginWindow();
 		loginframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		loginframe.setIconImage(img.getImage());
 		loginframe.setVisible(true);
 		loginframe.initialize();
 		loginframe.Repaint();
-		loginframe.setIconImage(img.getImage());
 		logintimer = new Timer (10, new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				loginframe.Repaint();
 			}
 		});
+
 		timeout = new Timer (1000, new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				SecoundsToTimeout--;
@@ -87,25 +93,19 @@ public class Main
 		OtherStuff.GetMOTD();
 		OtherStuff.GettrueMOTD();
 
-		OtherStuff.MakeValid();
-		
+		OtherStuff.MakeValid();	
+		OtherStuff.ReadStatsFromFile();
+		StatSaver.SyncStats();
+
 		timeout.start();
-		String host = "188.193.227.102";
+		String host = "188.194.129.46";
 		int port = Integer.parseInt("9977");
 		@SuppressWarnings("unused")
 		final Client chatframe = new Client(host, port);
 		timeout.stop();
-		
+
 		ScoreBoard = new ScoreboardPanel();
-		
-		/*menuframe = new ScoreboardWindow();
-		menuframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		menuframe.setVisible(true);
-		menuframe.setExtendedState(1);
-		menuframe.initialize();
-		menuframe.Repaint();
-		menuframe.setVisible(false);
-		menuframe.setExtendedState(0);*/
+		mainmenu = new MainMenu();
 
 		try {
 			String[] temp = RememberMeClass.RememberMeLogin().split(" ");
@@ -118,8 +118,16 @@ public class Main
 			e1.printStackTrace();
 		}
 
+		SaveToFileTimer = new Timer (50, new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("fire");
+				OtherStuff.SaveStatsToFile();
+				SaveToFileTimer.stop();
+			}
+		});
+
 	}
-	
+
 	public static void CloseScoreBoard(){
 		ScoreBoard.setVisible(false);
 	}
@@ -165,5 +173,34 @@ public class Main
 		if(registerframe.isVisible() == true){
 			registerframe.setVisible(false);
 		}
+	}
+
+	public static void OpenMainMenu(){
+		mainmenu.appendScoresNews();
+		mainmenu.repaint();
+		mainmenu.setVisible(true);
+		loginframe.setVisible(false);
+		logintimer.stop();
+		menutimer = new Timer (50, new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				mainmenu.repaint();
+			}
+		});
+		menutimer.start();
+	}
+
+	public static void CloseMainMenu(){
+		mainmenu.setVisible(false);
+		menutimer.stop();
+	}
+
+	public static void Logout(){
+		CloseMainMenu();
+		loginframe.setVisible(true);
+		logintimer.start();
+		LoginWindow.remembermecheckbox.setSelected(false);
+		RememberMeClass.RememberMeLogout();
+		LoginWindow.Password.setText("");
+		LoginWindow.Username.setText("");
 	}
 }

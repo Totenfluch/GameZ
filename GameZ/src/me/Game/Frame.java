@@ -11,6 +11,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferStrategy;
+import java.util.logging.Level;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -18,6 +19,7 @@ import javax.swing.JOptionPane;
 import me.Other.OtherStuff;
 import me.Other.RememberMeClass;
 import me.Other.ResourceLoader;
+import me.Other.StatSaver;
 import me.Sound.Sound;
 import me.Totenfluch.TServerClient.Client;
 import me.security.Login;
@@ -35,6 +37,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 	private static boolean MouseInDashboard = false;
 	RainParticle[] particles = new RainParticle[100];
 	int gamespeed = 2;
+	private int PlusScore = 0;
 
 	private int Score = 0;
 	private int AntiCheat1 = -10;
@@ -245,9 +248,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 				if(((Destroyer[c][0] - mousemoveX < 7 && Destroyer[c][0] - mousemoveX > -7) && (Destroyer[c][1] - mousemoveY < 7 && Destroyer[c][1] - mousemoveY > -7))){
 					ForceDeath(c, 1);
 				}else if(((GodModePowerupballx - mousemoveX < 7 && GodModePowerupballx - mousemoveX > -7) && (GodModePowerupbally - mousemoveY < 7 && GodModePowerupbally - mousemoveY > -7))  && GodModePowerupballactive == true){
-					GodModePowerupballactive = false;
-					GodModePowerup = true;
-					tickdiff = ticks+300;
+					TriggerGodMode();
 				}
 
 			}
@@ -256,9 +257,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 				if(((Destroyer2[d][0] - mousemoveX < 7 && Destroyer2[d][0] - mousemoveX > -7) && (Destroyer2[d][1] - mousemoveY < 7 && Destroyer2[d][1] - mousemoveY > -7 ))){
 					ForceDeath(d, 2);
 				}else if(((GodModePowerupballx - mousemoveX < 7 && GodModePowerupballx - mousemoveX > -7) && (GodModePowerupbally - mousemoveY < 7 && GodModePowerupbally - mousemoveY > -7))  && GodModePowerupballactive == true){
-					GodModePowerupballactive = false;
-					GodModePowerup = true;
-					tickdiff = ticks+300;
+					TriggerGodMode();
 				}
 			}
 
@@ -296,9 +295,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 				if(((CubeDestroyer[e][0] - mousemoveX < 7 && CubeDestroyer[e][0] - mousemoveX > -7) && (CubeDestroyer[e][1] - mousemoveY < 7 && CubeDestroyer[e][1] - mousemoveY > -7 ))){
 					ForceDeath(e, 3);
 				}else if(((GodModePowerupballx - mousemoveX < 7 && GodModePowerupballx - mousemoveX > -7) && (GodModePowerupbally - mousemoveY < 7 && GodModePowerupbally - mousemoveY > -7))  && GodModePowerupballactive == true){
-					GodModePowerupballactive = false;
-					GodModePowerup = true;
-					tickdiff = ticks+300;
+					TriggerGodMode();
 				}
 			}
 
@@ -319,8 +316,6 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 					}else if(DestroyerWallXorY == 0 && DestroyerWallMorP == 0){
 						DestroyerWall[i][0] = DestroyerWall[i][0] - (gamespeed+5);
 					}
-
-
 
 					if(DestroyerWall[i][1] > 595 && DestroyerWallXorY == 1 && DestroyerWallMorP == 1 ){
 						for(int c = 0 ; c < WallDestroyerAmount; c++){
@@ -358,16 +353,18 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 				if(((DestroyerWall[e][0] - mousemoveX < 7 && DestroyerWall[e][0] - mousemoveX > -7) && (DestroyerWall[e][1] - mousemoveY < 7 && DestroyerWall[e][1] - mousemoveY > -7 ))){
 					ForceDeath(e, 4);
 				}else if(((GodModePowerupballx - mousemoveX < 7 && GodModePowerupballx - mousemoveX > -7) && (GodModePowerupbally - mousemoveY < 7 && GodModePowerupbally - mousemoveY > -7))  && GodModePowerupballactive == true){
-					GodModePowerupballactive = false;
-					GodModePowerup = true;
-					tickdiff = ticks+300;
+					TriggerGodMode();
 				}
 			}
 		}
 
 		if(ActiveDestroyers.contains("4")){
 			for(int i = 0; i < SpiralDestestroyerAmount; i++){
-				SpiralDestroyerPos[i] = SpiralDestroyerPos[i]+SpiralSpeed*(gamespeed/2);
+				if(gamespeed > 1){
+					SpiralDestroyerPos[i] = SpiralDestroyerPos[i]+SpiralSpeed*(gamespeed/2);
+				}else{
+					SpiralDestroyerPos[i] = SpiralDestroyerPos[i]+SpiralSpeed;
+				}
 				double x = 5*SpiralDestroyerPos[i]*Math.cos(SpiralDestroyerPos[i]);
 				double y = 5*SpiralDestroyerPos[i]*Math.sin(SpiralDestroyerPos[i]);
 				SpiralDestroyer[i][0] = x+510;
@@ -381,9 +378,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 				if(((SpiralDestroyer[e][0] - mousemoveX < 7 && SpiralDestroyer[e][0] - mousemoveX > -7) && (SpiralDestroyer[e][1] - mousemoveY < 7 && SpiralDestroyer[e][1] - mousemoveY > -7 ))){
 					ForceDeath(e, 5);
 				}else if(((GodModePowerupballx - mousemoveX < 7 && GodModePowerupballx - mousemoveX > -7) && (GodModePowerupbally - mousemoveY < 7 && GodModePowerupbally - mousemoveY > -7))  && GodModePowerupballactive == true){
-					GodModePowerupballactive = false;
-					GodModePowerup = true;
-					tickdiff = ticks+300;
+					TriggerGodMode();
 				}
 			}
 		}
@@ -404,9 +399,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 				if(((CircleDestroyer[e][0] - mousemoveX < 7 && CircleDestroyer[e][0] - mousemoveX > -7) && (CircleDestroyer[e][1] - mousemoveY < 7 && CircleDestroyer[e][1] - mousemoveY > -7 ))){
 					ForceDeath(e, 6);
 				}else if(((GodModePowerupballx - mousemoveX < 7 && GodModePowerupballx - mousemoveX > -7) && (GodModePowerupbally - mousemoveY < 7 && GodModePowerupbally - mousemoveY > -7))  && GodModePowerupballactive == true){
-					GodModePowerupballactive = false;
-					GodModePowerup = true;
-					tickdiff = ticks+300;
+					TriggerGodMode();
 				}
 			}
 		}
@@ -480,6 +473,10 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			}
 		}
 
+		if(OtherStuff.randInt(1, 400+gamespeed*80) == 125 && GodModePowerupballactive == false && GodModePowerup == false){
+			GodModePowerupballactive = true;
+		}
+
 		// Godmode at Level change
 		for(int i=0; i<StartScoreLevel.length; i++){
 			if(((Score - StartScoreLevel[i] < 25 && Score - StartScoreLevel[i] > -25) && (Score - StartScoreLevel[i] < 25 && Score - StartScoreLevel[i] > -25 )) && GodModePowerup == false && Score > 500){
@@ -535,6 +532,10 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 					Score = Score+(gamespeed*2);
 					AntiCheat1 = AntiCheat1+(gamespeed*2);
 				}
+				if(ticks < tickdiff){
+					Score+=5;
+					AntiCheat1+=5;
+				}
 
 				if(backgroundon == true){
 					Score++;
@@ -543,13 +544,21 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			}
 		}
 
-		if(OtherStuff.randInt(1, 400+gamespeed*80) == 125 && GodModePowerupballactive == false && GodModePowerup == false){
-			GodModePowerupballactive = true;
-		}
-
 		ticks++;
 		AntiCheat2 = ticks*5;
-
+		
+		PlusScore = 0;
+		PlusScore = gamespeed;
+		if(disco == true){
+			PlusScore=gamespeed*2;
+		}
+		if(backgroundon == true){
+			PlusScore++;
+		}
+		if(ticks < tickdiff){
+			PlusScore+=5;
+		}
+		
 		if(tickdiff < ticks ){
 			GodModePowerup = false;
 		}
@@ -569,8 +578,16 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		CurrentLevel++;
 		Leveluptickdiff = ticks+300;
 	}
+	
+	public void TriggerGodMode(){
+		GodModePowerupballactive = false;
+		GodModePowerup = true;
+		tickdiff = ticks+300;
+		StatSaver.SaveStat("GodModesCollected", 1, 1.0);
+	}
 
 	public void RestartGame(){
+		StatSaver.SaveStat("TimesPlayed", 1, 1);
 		ActiveDestroyers = "1";
 		CurrentLevel = 1;
 		Score = 0;
@@ -641,7 +658,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 		DrawCenteredString(g, Color.ORANGE, "Level: " + CurrentLevel, JWidth/2, 650);
 		DrawCenteredString(g, Color.ORANGE, "Score: " + String.valueOf(Score), JWidth/2, 670);
-		DrawCenteredString(g, Color.GRAY, "[+" +gamespeed + "/tick] Gamespeed: " + gamespeed + "  Adjust with 1 & 2 (more speed more score!)", JWidth/2, 690);
+		DrawCenteredString(g, Color.GRAY, "[+" +gamespeed + " Score/tick] Gamespeed: " + gamespeed + "  Adjust with 1 & 2 (more speed more score!)", JWidth/2, 690);
 		DrawCenteredString(g, Color.GRAY, "Destroyers Active: " + String.valueOf(DestroyersOnline+Destroyers2Online+CubeDestroyerOnline), JWidth/2, 710);
 
 		if(backgroundon == true){
@@ -664,7 +681,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		if(ticks < 300){
 			DrawCenteredString(g, Color.GRAY, "[Score locked at 1] GodMode Time Left: " + String.valueOf(GodMode-ticks), JWidth/2, 790);
 		}else if(GodModePowerup == true){
-			DrawCenteredString(g, Color.GRAY, "(+10) Special Godmode on! for: " + String.valueOf(tickdiff-ticks), JWidth/2, 790);
+			DrawCenteredString(g, Color.GRAY, "[+5 Score/tick] Special Godmode on! for: " + String.valueOf(tickdiff-ticks), JWidth/2, 790);
 			g.setFont(new Font("Impact", Font.PLAIN, 25)); 
 			g.setColor(new Color(102, 51, 153));
 			g.drawString(String.valueOf(tickdiff-ticks), mousemoveX, mousemoveY);
@@ -676,6 +693,13 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			g.drawRect(5, 26, 1010, 600);
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 20)); 
 		}
+		
+		g.setFont(new Font("Impact", Font.BOLD, 50));
+		g.setColor(Color.GREEN);
+		g.drawString("+" + PlusScore, 880, 725);
+		g.drawString(""+ticks, 50, 725);
+		g.setFont(ftDefault);
+		
 
 		if(GodModePowerupballactive == true){
 			g.setColor(Color.PINK);
@@ -755,6 +779,16 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			Repaint();
 			Sound.stopSound();
 			Main.GamePaused = true;
+			if(Score > StatSaver.MaxScore){
+				StatSaver.SaveStat("MaxScore", 3, Score);
+			}
+			if(ticks >  StatSaver.MostTicksSurvived){
+				StatSaver.SaveStat("MostTicksSurvived", 3, ticks);
+			}
+			StatSaver.SaveStat("TimesDied", 1, 1);
+			if(CurrentLevel > StatSaver.BestLevel){
+				StatSaver.SaveStat("BestLevel", 3, CurrentLevel);
+			}
 			double diff = Score/(ticks-300);
 			Object[] options = {"Retry",
 					"Quit", "Submit Score & Retry", "Submit Score & Quit", "Submit, Logout & Quit"};
@@ -789,18 +823,20 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			}
 		}else{
 			if(GodMode-ticks < 0){
-				if(origin == 1){
-					Destroyer[c][0] = 1;
-					Score = Score+500;
-					AntiCheat1 = AntiCheat1+500;
-				}else if(origin == 2){
-					Destroyer2[c][0] = 1;
-					Score = Score+500;
-					AntiCheat1 = AntiCheat1+500;
-				}else if(origin == 3){
-					CubeDestroyer[c][0] = 1;
-					Score = Score+500;
-					AntiCheat1 = AntiCheat1+750;
+				if(pausediff < ticks){
+					if(origin == 1){
+						Destroyer[c][0] = 1;
+						Score = Score+500;
+						AntiCheat1 = AntiCheat1+500;
+					}else if(origin == 2){
+						Destroyer2[c][0] = 1;
+						Score = Score+500;
+						AntiCheat1 = AntiCheat1+500;
+					}else if(origin == 3){
+						CubeDestroyer[c][0] = 1;
+						Score = Score+750;
+						AntiCheat1 = AntiCheat1+750;
+					}
 				}
 			}
 		}
@@ -956,7 +992,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		}
 		if(key == KeyEvent.VK_CONTROL){
 			Main.OpenScoreBoard();
-			Main.GamePaused = true;
+			//Main.GamePaused = true;
 		}
 		if(key == KeyEvent.VK_ESCAPE){
 			Main.GamePaused = true;

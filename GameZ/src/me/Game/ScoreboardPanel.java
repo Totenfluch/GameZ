@@ -131,7 +131,7 @@ class ScoreboardPanel extends JFrame implements KeyListener{
 
 		public ImagePane() {
 			setOpaque(false);
-			background = ResourceLoader.loadBufferedImage("/scoreboard_01.png");
+			background = ResourceLoader.loadBufferedImage("/scoreboard_02.png");
 			offImage = ResourceLoader.loadBufferedImage("/reload.png");
 			offButton = new Ellipse2D.Float(212, 330, 25, 25);
 			MouseAdapter handler = new MouseAdapter() {
@@ -204,15 +204,16 @@ class ScoreboardPanel extends JFrame implements KeyListener{
 					if(mousemoveX >= 770 && mousemoveX <= 790 && mousemoveY >= 520 && mousemoveY <= 540){
 						g2d.drawImage(ResourceLoader.ImageLoad("/ReloadHover.png"), 770, 520, 20, 20, null);
 					}else{
-						g2d.drawImage(ResourceLoader.ImageLoad("/reload.png"), 770, 520, 20, 20, null);
+						g2d.drawImage(ResourceLoader.ImageLoad("/reload_02.png"), 770, 520, 20, 20, null);
 					}
 					if(mousemoveX >= 690 && mousemoveX <= 760 && mousemoveY >= 520 && mousemoveY <= 540){
 						g2d.drawImage(ResourceLoader.ImageLoad("/CloseHover.png"), 690, 520, 70, 20, null);
 					}else{
-						g2d.drawImage(ResourceLoader.ImageLoad("/Close.png"), 690, 520, 70, 20, null);
+						g2d.drawImage(ResourceLoader.ImageLoad("/Close_02.png"), 690, 520, 70, 20, null);
 					}
 					for(int b = 0; b<5 ; b++){
 						for(int i = 0; i< 20 ; i++){
+							g2d.setColor(Color.ORANGE);
 							g2d.drawString(OtherStuff.scores[i+(b*19)], 150+(b*125), 125+(i*20));
 						}
 					}
