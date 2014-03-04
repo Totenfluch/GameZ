@@ -18,16 +18,17 @@ import me.Other.RememberMeClass;
 import me.Other.StatSaver;
 import me.Sound.Sound;
 import me.Totenfluch.TServerClient.Client;
+import me.security.Login;
 import me.security.LoginWindow;
 import me.security.RegisterWindow;
 
 public class Main 
 {
 	public static boolean devbuild = false;
-	public static double Version = 10.4;
+	public static double Version = 11.2;
 	public static String DevState = "Release";
 	private static LoginWindow loginframe;
-	private static Timer timer = null;
+	public static Timer timer = null;
 	private static Timer logintimer = null;
 	public static Timer timeout = null;
 	public static Timer menutimer = null;
@@ -45,10 +46,11 @@ public class Main
 	public static MainMenu mainmenu;
 	public static boolean OnlineMode = true;
 	public static Timer SaveToFileTimer = null;
+	public static Frame frame = null;
+	public static OptionsWindow optionsframe = null;
 
 	public static void main(String[] args)
 	{
-
 		try {
 			lComputerIP = InetAddress.getLocalHost();
 		} catch (UnknownHostException e1) {
@@ -89,9 +91,22 @@ public class Main
 				SecoundsToTimeout--;
 			}
 		});
+		SaveToFileTimer = new Timer (50, new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				OtherStuff.SaveStatsToFile();
+				SaveToFileTimer.stop();
+			}
+		});
+		
+		timer = new Timer (10, new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				if(GamePaused == false){
+					frame.Repaint();
+					frame.Update();
+				}
+			}
+		});
 		logintimer.start();
-		OtherStuff.GetMOTD();
-		OtherStuff.GettrueMOTD();
 
 		OtherStuff.MakeValid();	
 		OtherStuff.ReadStatsFromFile();
@@ -103,9 +118,13 @@ public class Main
 		@SuppressWarnings("unused")
 		final Client chatframe = new Client(host, port);
 		timeout.stop();
+		
+		OtherStuff.GetMOTD();
+		OtherStuff.GettrueMOTD();
 
 		ScoreBoard = new ScoreboardPanel();
 		mainmenu = new MainMenu();
+		optionsframe = new OptionsWindow();
 
 		try {
 			String[] temp = RememberMeClass.RememberMeLogin().split(" ");
@@ -113,19 +132,11 @@ public class Main
 				LoginWindow.Username.setText(temp[1]);
 				LoginWindow.Password.setText(temp[2]);
 				LoginWindow.remembermecheckbox.setSelected(true);
+				Login.LogMeIn(temp[1], temp[2]);
 			}
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-
-		SaveToFileTimer = new Timer (50, new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("fire");
-				OtherStuff.SaveStatsToFile();
-				SaveToFileTimer.stop();
-			}
-		});
-
 	}
 
 	public static void CloseScoreBoard(){
@@ -140,7 +151,7 @@ public class Main
 	}
 
 	public static void StartGame(){
-		final Frame frame = new Frame();
+		frame = new Frame();
 		frame.setSize(1020, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
@@ -153,14 +164,6 @@ public class Main
 		Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
 				cursorImg, new Point(0, 0), "blank cursor");
 		frame.setCursor(blankCursor);
-		timer = new Timer (10, new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				if(GamePaused == false){
-					frame.Repaint();
-					frame.Update();
-				}
-			}
-		});
 		timer.start();
 		logintimer.stop();
 	}
@@ -176,7 +179,7 @@ public class Main
 	}
 
 	public static void OpenMainMenu(){
-		mainmenu.appendScoresNews();
+		MainMenu.appendScoresNews();
 		mainmenu.repaint();
 		mainmenu.setVisible(true);
 		loginframe.setVisible(false);
@@ -192,6 +195,14 @@ public class Main
 	public static void CloseMainMenu(){
 		mainmenu.setVisible(false);
 		menutimer.stop();
+	}
+	
+	public static void OpenOptions(){
+		optionsframe.setVisible(true);
+	}
+	
+	public static void CloseOptions(){
+		optionsframe.setVisible(false);
 	}
 
 	public static void Logout(){

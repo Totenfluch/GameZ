@@ -36,13 +36,15 @@ public class MainMenu extends JFrame implements MouseMotionListener, MouseListen
 	boolean PlayPressed;
 	boolean OptionsPressed;
 	
-	public JTextPane Scores, News;
+	public static JTextPane Scores, News;
 	
 	
-	public StyledDocument ScoresDoc;
-	public StyledDocument NewsDoc;
+	public static StyledDocument ScoresDoc;
+	public static StyledDocument NewsDoc;
 	
-	public SimpleAttributeSet OwnScore, OtherScores, NewsStyle;
+	public static SimpleAttributeSet OwnScore;
+	public static SimpleAttributeSet OtherScores;
+	public static SimpleAttributeSet NewsStyle;
 	
 	
 	public MainMenu(){
@@ -99,9 +101,16 @@ public class MainMenu extends JFrame implements MouseMotionListener, MouseListen
 		g.drawString(s, xPos, yPos);
 	}
 	
-	public void appendScoresNews(){
+	public static void appendScoresNews(){
+		boolean n = false;
 		for(int i = 0; i<28; i++){
 			if(OtherStuff.scores[i].contains(Login.ActiveUser)){
+				if(n == false){
+					if(i < StatSaver.BestRank || StatSaver.BestRank == 0){
+						StatSaver.SaveStat("BestRank", 3, i+1);
+					}
+					n = true;
+				}
 				AppendToDoc(ScoresDoc, OtherStuff.scores[i].replace("<", "[").replace(">", "] ~ "), OwnScore);
 			}else{
 				AppendToDoc(ScoresDoc, OtherStuff.scores[i].replace("<", "[").replace(">", "] ~ "), OtherScores);
@@ -113,12 +122,20 @@ public class MainMenu extends JFrame implements MouseMotionListener, MouseListen
 		}
 	}
 	
-	private void AppendToDoc(StyledDocument doc, String s, SimpleAttributeSet Style){
+	private static void AppendToDoc(StyledDocument doc, String s, SimpleAttributeSet Style){
 		try
 		{
 		    doc.insertString(doc.getLength(), s+"\n", Style);
 		}
 		catch(Exception e) { System.out.println(e); }
+	}
+	
+	public static void Refresh(){
+		OtherStuff.GetMOTD();
+		OtherStuff.GettrueMOTD();
+		Scores.setText("");
+		News.setText("");
+		appendScoresNews();
 	}
 	
 	
@@ -138,6 +155,7 @@ public class MainMenu extends JFrame implements MouseMotionListener, MouseListen
 			g.drawString("Best Level:", 335, 340);
 			
 			g.setColor(Color.RED);
+			g.setFont(new Font("Impact", Font.PLAIN, 20));
 			g.drawString(""+StatSaver.TimesPlayed, 615, 100);
 			g.drawString(""+StatSaver.MaxScore, 615, 140);
 			g.drawString(""+StatSaver.BestRank, 615, 180);
@@ -251,9 +269,10 @@ public class MainMenu extends JFrame implements MouseMotionListener, MouseListen
 		if(mousemoveX > 345 && mousemoveX < 670 && mousemoveY > 475 && mousemoveY < 585 && PlayPressed == true){
 			Main.CloseMainMenu();
 			Login.truelogin();
+			Main.CloseOptions();
 		}
 		if(mousemoveX > 750 && mousemoveX < 950 && mousemoveY > 500 && mousemoveY < 550 && OptionsPressed == true){
-			System.out.println("Options");
+			Main.OpenOptions();
 		}
 	}
 }

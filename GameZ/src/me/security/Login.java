@@ -47,6 +47,7 @@ public class Login {
 	public static void truelogin(){
 		Main.DisableLoginWindow();
 		Main.StartGame();
+		Main.GamePaused = false;
 		StatSaver.SaveStat("TimesPlayed", 1, 1);
 	}
 }

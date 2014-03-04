@@ -11,7 +11,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferStrategy;
-import java.util.logging.Level;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -488,31 +487,6 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			}
 		}
 
-		if(CurrentLevel == 1){
-			ActiveDestroyers = "1";
-		}else if(CurrentLevel == 2){
-			ActiveDestroyers = "12";
-		}else if(CurrentLevel == 3){
-			ActiveDestroyers = "3";
-		}else if(CurrentLevel == 4){
-			ActiveDestroyers = "13";
-		}else if(CurrentLevel == 5){
-			ActiveDestroyers = "4";
-		}else if(CurrentLevel == 6){
-			ActiveDestroyers = "41";
-		}else if(CurrentLevel == 7){
-			ActiveDestroyers = "432";
-		}else if(CurrentLevel == 8){
-			ActiveDestroyers = "5";
-		}else if(CurrentLevel == 9){
-			ActiveDestroyers = "51";
-		}else if(CurrentLevel == 10){
-			ActiveDestroyers = "524";
-		}else if(CurrentLevel == 11){
-			ActiveDestroyers = "6";
-		}
-
-
 		// Background
 
 		for(int i = 0; i < particles.length; i++)
@@ -546,7 +520,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 		ticks++;
 		AntiCheat2 = ticks*5;
-		
+
 		PlusScore = 0;
 		PlusScore = gamespeed;
 		if(disco == true){
@@ -558,7 +532,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		if(ticks < tickdiff){
 			PlusScore+=5;
 		}
-		
+
 		if(tickdiff < ticks ){
 			GodModePowerup = false;
 		}
@@ -577,8 +551,32 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		ShowLevelUp = true;
 		CurrentLevel++;
 		Leveluptickdiff = ticks+300;
+		
+		if(CurrentLevel == 1){
+			ActiveDestroyers = "1";
+		}else if(CurrentLevel == 2){
+			ActiveDestroyers = "12";
+		}else if(CurrentLevel == 3){
+			ActiveDestroyers = "3";
+		}else if(CurrentLevel == 4){
+			ActiveDestroyers = "13";
+		}else if(CurrentLevel == 5){
+			ActiveDestroyers = "4";
+		}else if(CurrentLevel == 6){
+			ActiveDestroyers = "41";
+		}else if(CurrentLevel == 7){
+			ActiveDestroyers = "432";
+		}else if(CurrentLevel == 8){
+			ActiveDestroyers = "5";
+		}else if(CurrentLevel == 9){
+			ActiveDestroyers = "51";
+		}else if(CurrentLevel == 10){
+			ActiveDestroyers = "524";
+		}else if(CurrentLevel == 11){
+			ActiveDestroyers = "6";
+		}
 	}
-	
+
 	public void TriggerGodMode(){
 		GodModePowerupballactive = false;
 		GodModePowerup = true;
@@ -693,13 +691,13 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			g.drawRect(5, 26, 1010, 600);
 			g.setFont(new Font("TimesRoman", Font.PLAIN, 20)); 
 		}
-		
+
 		g.setFont(new Font("Impact", Font.BOLD, 50));
 		g.setColor(Color.GREEN);
 		g.drawString("+" + PlusScore, 880, 725);
 		g.drawString(""+ticks, 50, 725);
 		g.setFont(ftDefault);
-		
+
 
 		if(GodModePowerupballactive == true){
 			g.setColor(Color.PINK);
@@ -791,7 +789,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			}
 			double diff = Score/(ticks-300);
 			Object[] options = {"Retry",
-					"Quit", "Submit Score & Retry", "Submit Score & Quit", "Submit, Logout & Quit"};
+					"Quit", "Submit Score & Retry", "Submit Score & Quit", "Submit, Logout & Quit", "Return to Main Menu"};
 			int n = JOptionPane.showOptionDialog(null,
 					"You Faggot Lost!\nYou scored: " + Score + " Points\nIn " + ticks + " ticks.\n" + "Average Difficulty: " + diff ,
 					"Question",
@@ -817,8 +815,15 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			}else if(n == 4){
 				RememberMeClass.RememberMeLogout();
 				System.exit(0);
+			}else if( n == 5){
+				Main.OpenMainMenu();
+				setVisible(false);
+				RestartGame();
+				Main.GamePaused = true;
+				MainMenu.Refresh();
 			}else{
 				RestartGame();
+				Main.frame = null;
 				Main.GamePaused = false;
 			}
 		}else{
