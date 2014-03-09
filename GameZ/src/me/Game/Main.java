@@ -24,30 +24,42 @@ import me.security.RegisterWindow;
 
 public class Main 
 {
+	
+	//Version
 	public static boolean devbuild = false;
 	public static double Version = 11.2;
 	public static String DevState = "Release";
+	
+	//Frames
+	public static Frame frame = null;
 	private static LoginWindow loginframe;
+	private static RegisterWindow registerframe;
+	public static ScoreboardPanel ScoreBoard;
+	public static MainMenu mainmenu;
+	public static OptionsWindow optionsframe = null;
+	
+	//Timers
 	public static Timer timer = null;
 	private static Timer logintimer = null;
 	public static Timer timeout = null;
 	public static Timer menutimer = null;
-	public static int SecoundsToTimeout = 20;
 	public static Timer scoreboardtimer = null;
+	public static Timer SaveToFileTimer = null;
+	
+	//ip stuff
 	public static InetAddress lComputerIP;
 	public static String ComputerIP;
 	public static String ComputerMac;
 	public static String ComputerName;
+	
+	//Offline mode
+	public static int SecoundsToTimeout = 20;
+	public static boolean OnlineMode = true;
+	
+	//Even I don't know :(
 	public static boolean Valid = false;
 	public static boolean GamePaused = false;
 	private static ImageIcon img2;
-	private static RegisterWindow registerframe;
-	public static ScoreboardPanel ScoreBoard;
-	public static MainMenu mainmenu;
-	public static boolean OnlineMode = true;
-	public static Timer SaveToFileTimer = null;
-	public static Frame frame = null;
-	public static OptionsWindow optionsframe = null;
 
 	public static void main(String[] args)
 	{
@@ -169,12 +181,18 @@ public class Main
 	}
 
 	public static void OpenRegisterWindow(){
-		registerframe.setVisible(true);
+		if(registerframe.isVisible() == false){
+			registerframe.setVisible(true);
+		}else{
+			System.out.println("registerframe is visible and is set visible!");
+		}
 	}
 
 	public static void CloseRegisterWindow(){
 		if(registerframe.isVisible() == true){
 			registerframe.setVisible(false);
+		}else{
+			System.out.println("registerframe is invisible and is set invisible!");
 		}
 	}
 
@@ -193,16 +211,28 @@ public class Main
 	}
 
 	public static void CloseMainMenu(){
-		mainmenu.setVisible(false);
-		menutimer.stop();
+		if(mainmenu.isVisible() == true){
+			mainmenu.setVisible(false);
+			menutimer.stop();
+		}else{
+			System.out.println("MainMenu is not visible and is set invisible!");
+		}
 	}
 	
 	public static void OpenOptions(){
-		optionsframe.setVisible(true);
+		if(optionsframe.isVisible() == false){
+			optionsframe.setVisible(true);
+		}else{
+			System.out.println("Optionswindow is visible and is set visible!");
+		}
 	}
 	
 	public static void CloseOptions(){
-		optionsframe.setVisible(false);
+		if(optionsframe.isVisible() == true){
+			optionsframe.setVisible(false);
+		}else{
+			System.out.println("Optionswindow is not visible and is set invisible!");
+		}
 	}
 
 	public static void Logout(){

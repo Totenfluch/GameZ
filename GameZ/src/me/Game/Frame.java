@@ -768,7 +768,6 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		if(ActiveDestroyers.contains("6")){
 			DrawLevel(g, 6);
 		}
-
 	}
 
 	private void ForceDeath(int c, int origin){
