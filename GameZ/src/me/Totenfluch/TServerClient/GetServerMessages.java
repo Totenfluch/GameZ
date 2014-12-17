@@ -20,7 +20,6 @@ public class GetServerMessages{
 			System.exit(0);
 		}
 
-
 		else if(message.startsWith("YouGotkicked")){
 			String [] kickreason = message.split(" ");
 			if(kickreason.length == 1){

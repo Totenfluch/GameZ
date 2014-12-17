@@ -27,20 +27,20 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 
 	private static final long serialVersionUID = 1L;
 	private BufferStrategy strat;
-	private static int JHeight;
-	private static int JWidth;
+	private int JHeight;
+	private int JWidth;
 	int mouseX = 0;
 	int mouseY = 0;
 	int mousemoveX =  0;
 	int mousemoveY =  0;
-	private static boolean MouseInDashboard = false;
+	private boolean MouseInDashboard = false;
 	RainParticle[] particles = new RainParticle[100];
 	int gamespeed = 2;
 	private int PlusScore = 0;
+	public static boolean isReturningToMainMenu = false;
 
 	private int Score = 0;
 	private int AntiCheat1 = -10;
-	public static boolean scoreboard = false;
 	private int tickdiff = 0;
 	private int ticks = 0;
 	private int AntiCheat2 = 0;
@@ -75,13 +75,13 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 	private boolean GodModePowerupballactive = false;
 
 	private int DestroyersOnline = 10;
-	public static int[][] Destroyer = new int[999][2];
+	private int[][] Destroyer = new int[999][2];
 
 	private int Destroyers2Online = 10;
-	public static int[][] Destroyer2 = new int[999][2];
+	private int[][] Destroyer2 = new int[999][2];
 
 	private int CubeDestroyerOnline = 0;
-	public static int[][] CubeDestroyer = new int[999][2];
+	private int[][] CubeDestroyer = new int[999][2];
 
 	private int WallDestroyerAmount = 30;
 	private int[][] DestroyerWall = new int[WallDestroyerAmount+1][2];
@@ -167,7 +167,19 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 				}
 			}
 		}
-
+		
+		if(OptionsWindow.Discoon.isSelected() == true){
+			disco = true;
+		}else if(OptionsWindow.Discooff.isSelected() == true){
+			disco = false;
+		}
+		
+		if(OptionsWindow.Backgroundon.isSelected() == true){
+			backgroundon = true;
+		}else if(OptionsWindow.Backgroundoff.isSelected() == true){
+			backgroundon = false;
+		}
+		
 	}
 
 	public void initialize()
@@ -593,7 +605,6 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		AntiCheat2 = 0;
 		ticks = 0;
 		lost = false;
-		gamespeed = 2;
 		DestroyersOnline = 10;
 		Destroyers2Online = 10;
 		tickdiff = 0;
@@ -602,8 +613,29 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 		GodModePowerup = false;
 		godmodesequencecount = 150;
 		CubeDestroyerOnline = 0;
-		disco = false;
-		Sound.playSound("Sound2.wav");
+		
+		if(OptionsWindow.Gamespeedrest.isSelected() == true){
+			gamespeed = 2;
+		}
+		
+		if(OptionsWindow.Discoon.isSelected() == true){
+			disco = true;
+		}else if(OptionsWindow.Discooff.isSelected() == true){
+			disco = false;
+		}
+		
+		if(OptionsWindow.Backgroundon.isSelected() == true){
+			backgroundon = true;
+		}else if(OptionsWindow.Backgroundoff.isSelected() == true){
+			backgroundon = false;
+		}
+		
+		if(isReturningToMainMenu == false){
+			Sound.playSound("Sound2.wav");
+		}else if(isReturningToMainMenu == true){
+			isReturningToMainMenu = false;
+		}
+		
 		for(int i = 0; i < 999; i++){
 			for(int b = 0; b < 2; b++){
 				if(DestroyersOnline < i){
@@ -817,6 +849,7 @@ public class Frame extends JFrame implements KeyListener, MouseListener, MouseMo
 			}else if( n == 5){
 				Main.OpenMainMenu();
 				setVisible(false);
+				isReturningToMainMenu = true;
 				RestartGame();
 				Main.GamePaused = true;
 				MainMenu.Refresh();

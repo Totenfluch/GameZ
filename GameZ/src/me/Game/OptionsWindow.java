@@ -19,12 +19,12 @@ import javax.swing.event.ChangeListener;
 
 public class OptionsWindow extends JFrame implements ChangeListener{
 	private static final long serialVersionUID = 1L;
-	public static float MasterVolume;
 	public static JRadioButton Backgrounddefault, Backgroundon, Backgroundoff, Discodefault, Discoon, Discooff, Gamespeeddefault, Gamespeedrest;
 	public JButton SaveandExit;
 	int Volume_min = 0;
-	int Volume_max = 100;
-	int Volume_init = 10;
+	int Volume_max = 150;
+	int Volume_init = 45;
+	public static float MasterVolume = 45;
 	int JWidth, JHight;
 	Font ft = new Font("Impact", Font.BOLD, 15);
 	JSlider Volume = new JSlider(JSlider.HORIZONTAL, Volume_min, Volume_max, Volume_init);
@@ -144,9 +144,9 @@ public class OptionsWindow extends JFrame implements ChangeListener{
 		 * 
 		 */
 		
-		Backgroundon.setEnabled(true);
-		Gamespeedrest.setEnabled(true);
-		Discooff.setEnabled(true);
+		Backgroundon.setSelected(true);
+		Gamespeedrest.setSelected(true);
+		Discooff.setSelected(true);
 	}
 	
 	private void DrawCenteredString(Graphics g, Font ft, Color color, String s, int xPos, int yPos){

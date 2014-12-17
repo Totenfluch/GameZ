@@ -5,6 +5,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 
+import me.Game.OptionsWindow;
 import me.Other.ResourceLoader;
 
 public class Sound {
@@ -19,7 +20,7 @@ public class Sound {
 		        clip.loop(-1);
 		        clip.start();
 		        FloatControl volume = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-		        volume.setValue(-45);
+		        volume.setValue(-80+OptionsWindow.MasterVolume);
 		      } catch (Exception e) {
 		        System.err.println(e.getMessage());
 		      }

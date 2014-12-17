@@ -27,7 +27,7 @@ public class Main
 	
 	//Version
 	public static boolean devbuild = false;
-	public static double Version = 11.2;
+	public static double Version = 11.3;
 	public static String DevState = "Release";
 	
 	//Frames
@@ -118,6 +118,12 @@ public class Main
 				}
 			}
 		});
+		
+		menutimer = new Timer (50, new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				mainmenu.repaint();
+			}
+		});
 		logintimer.start();
 
 		OtherStuff.MakeValid();	
@@ -125,7 +131,7 @@ public class Main
 		StatSaver.SyncStats();
 
 		timeout.start();
-		String host = "188.194.129.46";
+		String host = "192.168.178.38";
 		int port = Integer.parseInt("9977");
 		@SuppressWarnings("unused")
 		final Client chatframe = new Client(host, port);
@@ -202,11 +208,6 @@ public class Main
 		mainmenu.setVisible(true);
 		loginframe.setVisible(false);
 		logintimer.stop();
-		menutimer = new Timer (50, new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				mainmenu.repaint();
-			}
-		});
 		menutimer.start();
 	}
 

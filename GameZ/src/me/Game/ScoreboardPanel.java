@@ -42,7 +42,7 @@ class ScoreboardPanel extends JFrame implements KeyListener{
 		setContentPane(new ContentPane());
 
 		String version = System.getProperty("java.version");
-		if (version.startsWith("1.7")) {
+		if (version.startsWith("1.")) {
 			setBackground(new Color(0, 0, 0, 0));
 		} else if (version.startsWith("1.6")) {
 			if (supportsPerAlphaPixel()) {
